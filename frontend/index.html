@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0a0c">
+  <meta name="description" content="FoodWings - Complete Food Delivery Ecosystem (Customer, Restaurant Partner & Rider Apps)">
+  <title>FoodWings — Live Food Delivery Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=Manrope:wght@500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap">
+  <!-- Map library (real street maps) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="stagepage">
+    <div class="announce">
+      <span class="live">Live Platform</span>
+      <span>Three interconnected apps running on a single reactive state &amp; shared database.</span>
+      <span class="spacer"></span>
+      <button data-page="reset">Reset demo data ↺</button>
+    </div>
+    <header class="topnav">
+      <div class="brandmark"><span id="topLogo"></span><b>FoodWings</b><span>Customer · Partner · Rider</span></div>
+      <nav class="picker" aria-label="Choose layout view">
+        <button data-page="pick" data-app="all" aria-pressed="true">⚡ All 3 Apps</button>
+        <button data-page="pick" data-app="customer" aria-pressed="false">🍔 Customer</button>
+        <button data-page="pick" data-app="restaurant" aria-pressed="false">🍳 Kitchen</button>
+        <button data-page="pick" data-app="rider" aria-pressed="false">🛵 Rider</button>
+      </nav>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <a href="login.html" class="nav-auth-btn" title="Sign In or Register a new account">
+          <span>👤</span> Sign In / Register
+        </a>
+        <button class="modebadge" data-page="mode" title="Switch between demo data and the live API">Demo data</button>
+      </div>
+    </header>
+    <div class="stage">
+      <section class="hero">
+        <div>
+          <span class="kicker">FoodWings Unified Ecosystem</span>
+          <h1>Hungry now. <em>Delivered fast.</em></h1>
+          <p>Order in the customer app, prepare in the kitchen portal, and track delivery in the rider app with synchronized real-time updates.</p>
+        </div>
+        <div class="flow" aria-label="Order flow">
+          <span><b>1</b> Order &amp; Pay</span>
+          <span><b>2</b> Kitchen Prep</span>
+          <span><b>3</b> Rider Pickup</span>
+          <span><b>4</b> Doorstep Delivery</span>
+        </div>
+      </section>
+      <section class="device active" data-app="customer">
+        <div class="devlabel"><b><i>01</i> Customer App</b><a href="customer.html" target="_blank" rel="noopener">Open alone ↗</a></div>
+        <div class="frame" id="app-customer"></div>
+      </section>
+      <section class="device tablet" data-app="restaurant">
+        <div class="devlabel"><b><i>02</i> Kitchen Partner Portal</b><a href="restaurant.html" target="_blank" rel="noopener">Open alone ↗</a></div>
+        <div class="frame" id="app-restaurant"></div>
+      </section>
+      <section class="device" data-app="rider">
+        <div class="devlabel"><b><i>03</i> Rider Partner HUD</b><a href="rider.html" target="_blank" rel="noopener">Open alone ↗</a></div>
+        <div class="frame" id="app-rider"></div>
+      </section>
+    </div>
+    <aside id="inspector"></aside>
+  </div>
+  <script src="js/core/config.js"></script>
+  <script src="js/core/ui.js"></script>
+  <script src="js/core/map.js"></script>
+  <script src="js/core/operations.js"></script>
+  <script src="js/core/mock-server.js"></script>
+  <script src="js/core/api.js"></script>
+  <script src="js/core/gateway-sdk.js"></script>
+  <script src="js/core/shell.js"></script>
+  <script src="js/core/inspector.js"></script>
+  <script src="js/core/page.js"></script>
+  <script src="js/screens/login.js"></script>
+  <script src="js/screens/customer.js"></script>
+  <script src="js/screens/restaurant.js"></script>
+  <script src="js/screens/rider.js"></script>
+  <script>
+    App.initPage();
+    document.getElementById("topLogo").innerHTML = App.logo(36);
+    App.mountApp(document.getElementById("app-customer"), "customer");
+    App.mountApp(document.getElementById("app-restaurant"), "restaurant");
+    App.mountApp(document.getElementById("app-rider"), "rider");
+    App.mountInspector(document.getElementById("inspector"));
+  </script>
+</body>
+</html>

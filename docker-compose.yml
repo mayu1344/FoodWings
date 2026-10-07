@@ -1,0 +1,39 @@
+# One command local setup:  docker compose up --build
+#   PostgreSQL on localhost:5432 (tables + security + seed loaded automatically on first start)
+#   API on http://localhost:8000/docs
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres_local_only
+      POSTGRES_DB: swiggy_db
+    command: >
+      postgres -c log_statement=ddl
+               -c log_parameter_max_length=0
+               -c log_parameter_max_length_on_error=0
+    ports: ["5432:5432"]
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./db/01_schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+      - ./db/02_payment_security.sql:/docker-entrypoint-initdb.d/02_payment_security.sql:ro
+      - ./db/03_seed.sql:/docker-entrypoint-initdb.d/03_seed.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d swiggy_db"]
+      interval: 3s
+      retries: 20
+
+  api:
+    build: ./api
+    environment:
+      DATABASE_URL: postgresql://app_user:change_me_in_env@db:5432/swiggy_db
+      TOKEN_SECRET: local-dev-secret-change-me
+      OTP_DEV_MODE: "true"
+      ENABLE_MOCK_GATEWAY: "true"
+      MOCKPAY_WEBHOOK_SECRET: local-webhook-secret
+    ports: ["8000:8000"]
+    depends_on:
+      db: { condition: service_healthy }
+
+volumes:
+  pgdata:

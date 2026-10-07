@@ -1,0 +1,63 @@
+/* page.js - wires the page around the apps: demo/live switch, reset, and the app picker on small screens. */
+(function () {
+  function sessionsReset() {
+    try { Object.keys(localStorage).filter((k) => k.startsWith("foodwings.session.")).forEach((k) => localStorage.removeItem(k)); } catch (e) { /* ignore */ }
+  }
+
+  function applyTheme(themeName) {
+    const theme = themeName === "light" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", theme);
+    document.body && document.body.setAttribute("data-theme", theme);
+    try { localStorage.setItem("foodwings.theme", theme); } catch (err) { /* ignore */ }
+    document.querySelectorAll("[data-page=theme]").forEach((b) => {
+      const isLight = theme === "light";
+      b.textContent = isLight ? "Light mode" : "Dark mode";
+      b.setAttribute("aria-label", isLight ? "Switch to dark theme" : "Switch to light theme");
+    });
+  }
+
+  App.initPage = function () {
+    const savedTheme = (() => {
+      try { return localStorage.getItem("foodwings.theme"); } catch (err) { return null; }
+    })();
+    applyTheme(savedTheme || "dark");
+
+    document.querySelectorAll("[data-page=mode]").forEach((b) => {
+      b.dataset.mode = App.config.mode;
+      b.textContent = App.config.mode === "demo" ? "Demo data" : "Live API";
+      if (App.config.lockMode) b.disabled = true;
+    });
+    document.querySelectorAll("[data-page=reset]").forEach((b) => { b.hidden = App.config.mode !== "demo"; });
+    document.addEventListener("click", (e) => {
+      const b = e.target.closest("[data-page]");
+      if (!b) return;
+      if (b.dataset.page === "theme") {
+        const nextTheme = document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light";
+        applyTheme(nextTheme);
+      }
+      if (b.dataset.page === "mode" && !App.config.lockMode) {
+        try { localStorage.setItem("foodwings.mode", App.config.mode === "demo" ? "live" : "demo"); } catch (err) { /* ignore */ }
+        location.reload();
+      }
+      if (b.dataset.page === "reset") { App.mockServer.resetDb(); sessionsReset(); location.reload(); }
+      if (b.dataset.page === "pick") {
+        const app = b.dataset.app;
+        const stage = document.querySelector(".stage");
+        if (stage) {
+          stage.classList.toggle("stage-single", app !== "all");
+        }
+        document.querySelectorAll(".device").forEach((d) => {
+          if (app === "all") {
+            d.classList.add("active");
+            d.style.display = "";
+          } else {
+            const isMatch = d.dataset.app === app;
+            d.classList.toggle("active", isMatch);
+            d.style.display = isMatch ? "flex" : "none";
+          }
+        });
+        document.querySelectorAll("[data-page=pick]").forEach((x) => x.setAttribute("aria-pressed", x === b));
+      }
+    });
+  };
+})();

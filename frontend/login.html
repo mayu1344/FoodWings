@@ -1,0 +1,974 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0a0c">
+  <title>FoodWings — Sign In & Register</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=Manrope:wght@500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    /* Direct Embedded High-Priority Auth Styles */
+    *, *::before, *::after { box-sizing: border-box; }
+    body.auth-page {
+      margin: 0;
+      padding: 24px 16px;
+      min-height: 100vh;
+      background: radial-gradient(circle at 80% 20%, rgba(255, 214, 10, 0.08), transparent 50%),
+                  radial-gradient(circle at 20% 80%, rgba(255, 51, 75, 0.06), transparent 50%),
+                  #0a0a0e;
+      color: #f8fafc;
+      font-family: 'Manrope', -apple-system, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    .auth-nav {
+      width: 100%;
+      max-width: 540px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      padding: 10px 16px;
+      background: rgba(18, 18, 24, 0.85);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+    }
+
+    .brandmark-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: #fff;
+    }
+
+    .brandmark-link b {
+      font-family: 'Archivo', sans-serif;
+      font-weight: 900;
+      font-size: 1.3rem;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #fff 40%, #ffd60a 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brandmark-link span {
+      font-size: 0.72rem;
+      color: #64748b;
+      font-weight: 700;
+    }
+
+    .nav-back-link {
+      color: #ffd60a;
+      font-weight: 800;
+      font-size: 0.8rem;
+      text-decoration: none;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: rgba(255, 214, 10, 0.1);
+      border: 1px solid rgba(255, 214, 10, 0.25);
+      transition: all 0.2s;
+    }
+
+    .nav-back-link:hover {
+      background: #ffd60a;
+      color: #000;
+    }
+
+    body[data-theme="light"] {
+      background: #edf3fb;
+      color: #111827;
+    }
+
+    body[data-theme="light"] .auth-nav {
+      background: rgba(255, 255, 255, 0.9);
+      border-color: rgba(148, 163, 184, 0.2);
+    }
+
+    body[data-theme="light"] .brandmark-link,
+    body[data-theme="light"] .nav-back-link,
+    body[data-theme="light"] .auth-title-area h1,
+    body[data-theme="light"] .role-btn,
+    body[data-theme="light"] .auth-tab-btn,
+    body[data-theme="light"] .form-label,
+    body[data-theme="light"] .auth-box {
+      color: #111827;
+    }
+
+    body[data-theme="light"] .auth-box {
+      background: rgba(255, 255, 255, 0.96);
+      border-color: rgba(148, 163, 184, 0.2);
+      box-shadow: 0 18px 42px rgba(15, 23, 42, 0.08);
+    }
+
+    body[data-theme="light"] .role-btn,
+    body[data-theme="light"] .auth-mode-tab-wrap,
+    body[data-theme="light"] .role-grid,
+    body[data-theme="light"] .standard-input,
+    body[data-theme="light"] .clean-input,
+    body[data-theme="light"] .standard-select,
+    body[data-theme="light"] .otp-field-input,
+    body[data-theme="light"] .persona-btn-card,
+    body[data-theme="light"] .otp-display-box {
+      background: #f8fafc;
+      border-color: rgba(148, 163, 184, 0.25);
+      color: #0f172a;
+    }
+
+    body[data-theme="light"] .auth-title-area p,
+    body[data-theme="light"] .persona-card .p-text span,
+    body[data-theme="light"] .input-hint,
+    body[data-theme="light"] .muted-note,
+    body[data-theme="light"] .role-btn,
+    body[data-theme="light"] .auth-tab-btn,
+    body[data-theme="light"] .status-msg-banner {
+      color: #475569;
+    }
+
+    body[data-theme="light"] .persona-btn-card:hover,
+    body[data-theme="light"] .role-btn:hover {
+      background: rgba(255, 214, 10, 0.08);
+    }
+
+    .auth-box {
+      width: 100%;
+      max-width: 500px;
+      background: rgba(18, 18, 26, 0.96);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 32px 28px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 214, 10, 0.12);
+      backdrop-filter: blur(24px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .auth-box::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #ffd60a, #ff9f0a, #ff334b);
+    }
+
+    .auth-title-area {
+      text-align: center;
+      margin-bottom: 22px;
+    }
+
+    .auth-icon-circle {
+      width: 60px;
+      height: 60px;
+      border-radius: 18px;
+      background: rgba(255, 214, 10, 0.12);
+      border: 1px solid rgba(255, 214, 10, 0.25);
+      display: grid;
+      place-items: center;
+      font-size: 28px;
+      margin: 0 auto 12px;
+      box-shadow: 0 8px 24px rgba(255, 214, 10, 0.15);
+    }
+
+    .auth-title-area h1 {
+      font-family: 'Archivo', sans-serif;
+      font-size: 1.55rem;
+      font-weight: 900;
+      color: #fff;
+      margin: 0 0 6px;
+      letter-spacing: -0.02em;
+    }
+
+    .auth-title-area p {
+      margin: 0;
+      color: #94a3b8;
+      font-size: 0.88rem;
+    }
+
+    /* Role Pills */
+    .role-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 5px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      margin-bottom: 20px;
+    }
+
+    .role-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 10px 4px;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      color: #94a3b8;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.75rem;
+      transition: all 0.2s;
+    }
+
+    .role-btn .role-icon { font-size: 20px; }
+
+    .role-btn:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: #fff;
+    }
+
+    .role-btn.active {
+      background: rgba(255, 214, 10, 0.15);
+      border-color: rgba(255, 214, 10, 0.35);
+      color: #ffd60a;
+      box-shadow: 0 4px 12px rgba(255, 214, 10, 0.15);
+    }
+
+    /* Tabs (Sign In vs Register) */
+    .auth-mode-tab-wrap {
+      display: flex;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 4px;
+      gap: 4px;
+      margin-bottom: 22px;
+    }
+
+    .auth-tab-btn {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      background: transparent;
+      color: #94a3b8;
+      font-weight: 800;
+      font-size: 0.88rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+
+    .auth-tab-btn.active {
+      background: #ffd60a;
+      color: #000;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Form Fields */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .form-label {
+      font-size: 0.8125rem;
+      font-weight: 800;
+      color: #cbd5e1;
+    }
+
+    .phone-input-row {
+      display: flex;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.45);
+      border: 1.5px solid rgba(255, 255, 255, 0.14);
+      border-radius: 10px;
+      overflow: hidden;
+      transition: all 0.2s;
+    }
+
+    .phone-input-row:focus-within {
+      border-color: #ffd60a;
+      box-shadow: 0 0 0 3px rgba(255, 214, 10, 0.2);
+    }
+
+    .prefix-box {
+      padding: 12px 14px;
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: #94a3b8;
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .clean-input {
+      flex: 1;
+      background: transparent !important;
+      border: none !important;
+      outline: none !important;
+      box-shadow: none !important;
+      padding: 12px 14px;
+      color: #fff !important;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .standard-input, .standard-select {
+      background: rgba(0, 0, 0, 0.45) !important;
+      border: 1.5px solid rgba(255, 255, 255, 0.14) !important;
+      border-radius: 10px;
+      padding: 12px 14px;
+      color: #fff !important;
+      font-size: 0.95rem;
+      font-weight: 600;
+      width: 100%;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .standard-input:focus, .standard-select:focus {
+      border-color: #ffd60a !important;
+      box-shadow: 0 0 0 3px rgba(255, 214, 10, 0.2);
+    }
+
+    .otp-display-box {
+      background: rgba(255, 214, 10, 0.1);
+      border: 1px solid rgba(255, 214, 10, 0.3);
+      border-radius: 12px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      font-size: 0.88rem;
+      color: #fef08a;
+    }
+
+    .change-phone-btn {
+      background: none;
+      border: none;
+      color: #ffd60a;
+      font-weight: 800;
+      text-decoration: underline;
+      cursor: pointer;
+      font-size: 0.82rem;
+    }
+
+    .otp-field-input {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.5rem !important;
+      letter-spacing: 0.4em;
+      text-align: center;
+      font-weight: 900;
+      color: #ffd60a !important;
+      background: rgba(0, 0, 0, 0.6) !important;
+      border: 2px solid rgba(255, 214, 10, 0.4) !important;
+      border-radius: 12px;
+      padding: 14px;
+      width: 100%;
+      outline: none;
+    }
+
+    .otp-field-input:focus {
+      border-color: #ffd60a !important;
+      box-shadow: 0 0 0 4px rgba(255, 214, 10, 0.3);
+    }
+
+    .dev-badge-msg {
+      display: block;
+      font-size: 0.78rem;
+      color: #38bdf8;
+      font-family: 'JetBrains Mono', monospace;
+      margin-top: 6px;
+      font-weight: 700;
+    }
+
+    .submit-glow-btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #ffd60a, #f59e0b);
+      color: #000;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(255, 214, 10, 0.35);
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .submit-glow-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(255, 214, 10, 0.5);
+    }
+
+    .submit-glow-btn:active {
+      transform: translateY(1px);
+    }
+
+    .submit-glow-btn[disabled] {
+      opacity: 0.6;
+      cursor: wait;
+      transform: none !important;
+    }
+
+    .status-msg-banner {
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      margin-bottom: 18px;
+      display: none;
+      animation: fadeIn 0.2s;
+    }
+
+    .status-msg-banner.success {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: #34d399;
+    }
+
+    .status-msg-banner.error {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #f87171;
+    }
+
+    /* Personas */
+    .persona-box {
+      margin-top: 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 18px;
+    }
+
+    .persona-title {
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #64748b;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    .persona-list-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .persona-btn-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 10px 14px;
+      color: #fff;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s;
+    }
+
+    .persona-btn-card:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 214, 10, 0.4);
+      transform: translateX(3px);
+    }
+
+    .p-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255, 214, 10, 0.15);
+      color: #ffd60a;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      font-size: 0.85rem;
+    }
+
+    .p-text {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .p-text b { font-size: 0.88rem; }
+    .p-text span { font-size: 0.72rem; color: #94a3b8; }
+    .p-arrow { font-weight: 900; color: #64748b; }
+
+    .role-extra-box {
+      background: rgba(255, 214, 10, 0.04);
+      border: 1px solid rgba(255, 214, 10, 0.15);
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 16px;
+    }
+
+    .role-box-header {
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: #ffd60a;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body class="auth-page">
+  <!-- Top Navigation -->
+  <nav class="auth-nav">
+    <a href="index.html" class="brandmark-link">
+      <span id="topLogo"></span>
+      <b>FoodWings</b>
+      <span>Auth Portal</span>
+    </a>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <button type="button" class="nav-back-link" data-theme-toggle aria-label="Toggle color theme">Dark mode</button>
+      <a href="index.html" class="nav-back-link">‹ All 3 Apps</a>
+    </div>
+  </nav>
+
+  <!-- Auth Card Container -->
+  <main class="auth-box">
+    <!-- Header -->
+    <div class="auth-title-area">
+      <div class="auth-icon-circle" id="roleIcon">🍔</div>
+      <h1 id="authMainTitle">Sign In to FoodWings</h1>
+      <p id="authSubtitle">Select your role and enter your mobile number.</p>
+    </div>
+
+    <!-- Role Selector Grid -->
+    <div class="role-grid" role="tablist">
+      <button type="button" class="role-btn active" data-role="customer">
+        <span class="role-icon">🍔</span>
+        <span>Customer</span>
+      </button>
+      <button type="button" class="role-btn" data-role="restaurant">
+        <span class="role-icon">🍳</span>
+        <span>Kitchen</span>
+      </button>
+      <button type="button" class="role-btn" data-role="rider">
+        <span class="role-icon">🛵</span>
+        <span>Rider</span>
+      </button>
+    </div>
+
+    <!-- Mode Switcher (Sign In vs Register) -->
+    <div class="auth-mode-tab-wrap">
+      <button type="button" class="auth-tab-btn active" id="tabLogin" onclick="setAuthMode('login')">
+        Sign In
+      </button>
+      <button type="button" class="auth-tab-btn" id="tabRegister" onclick="setAuthMode('register')">
+        Create Account
+      </button>
+    </div>
+
+    <!-- Notification Banner -->
+    <div id="statusBanner" class="status-msg-banner"></div>
+
+    <!-- ================= FORM: SIGN IN ================= -->
+    <form id="formSignIn" onsubmit="handleFormSubmit(event)">
+      <div id="phoneInputSection" class="form-group">
+        <label class="form-label" for="phoneInput">Mobile Number *</label>
+        <div class="phone-input-row">
+          <span class="prefix-box">+91</span>
+          <input id="phoneInput" type="tel" inputmode="numeric" placeholder="98450 11111" maxlength="10" class="clean-input" required autofocus>
+        </div>
+      </div>
+
+      <!-- OTP Step Section (hidden by default) -->
+      <div id="otpInputSection" style="display:none;">
+        <div class="otp-display-box">
+          <span>OTP sent to <b id="targetPhoneText"></b></span>
+          <button type="button" class="change-phone-btn" onclick="resetToPhoneStep()">Change</button>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="otpInput">6-Digit Verification Code</label>
+          <input id="otpInput" type="text" inputmode="numeric" maxlength="6" placeholder="• • • • • •" class="otp-field-input">
+          <span id="devOtpTag" class="dev-badge-msg"></span>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <button id="btnSubmitAuth" type="submit" class="submit-glow-btn">
+        <span id="btnSubmitText">Send OTP →</span>
+      </button>
+    </form>
+
+    <!-- ================= FORM: REGISTER ================= -->
+    <form id="formSignUp" style="display:none;" onsubmit="handleFormSubmit(event)">
+      <div class="form-group">
+        <label class="form-label" for="regFullName">Full Name *</label>
+        <input id="regFullName" type="text" placeholder="e.g. Ramesh Kumar" class="standard-input" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="regPhoneInput">Mobile Number *</label>
+        <div class="phone-input-row">
+          <span class="prefix-box">+91</span>
+          <input id="regPhoneInput" type="tel" inputmode="numeric" placeholder="98450 99999" maxlength="10" class="clean-input" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="regEmailInput">Email Address (Optional)</label>
+        <input id="regEmailInput" type="email" placeholder="ramesh@example.com" class="standard-input">
+      </div>
+
+      <!-- Role-specific extra fields -->
+      <div id="customerExtraFields" class="role-extra-box">
+        <div class="role-box-header">📍 Delivery Address</div>
+        <div class="form-group" style="margin-bottom:0;">
+          <input id="regAddress" type="text" placeholder="e.g. 14, Gandhi Bazaar, Basavanagudi" class="standard-input">
+        </div>
+      </div>
+
+      <div id="restaurantExtraFields" class="role-extra-box" style="display:none;">
+        <div class="role-box-header">🍳 Restaurant Details</div>
+        <div class="form-group">
+          <input id="regRestName" type="text" placeholder="Restaurant Name (e.g. Royal Biryani)" class="standard-input">
+        </div>
+        <div class="form-group" style="margin-bottom:0;">
+          <input id="regCuisines" type="text" placeholder="Cuisines (e.g. North Indian, Biryani)" class="standard-input">
+        </div>
+      </div>
+
+      <div id="riderExtraFields" class="role-extra-box" style="display:none;">
+        <div class="role-box-header">🛵 Rider Details</div>
+        <div class="form-group">
+          <select id="regVehicle" class="standard-select">
+            <option value="BIKE">Motorcycle / Bike</option>
+            <option value="SCOOTER">Scooter / Activa</option>
+            <option value="EV">Electric Vehicle (EV)</option>
+          </select>
+        </div>
+        <div class="form-group" style="margin-bottom:0;">
+          <input id="regVehicleNo" type="text" placeholder="Vehicle Reg No. (e.g. KA05AB1234)" class="standard-input">
+        </div>
+      </div>
+
+      <!-- OTP Step Section for Register -->
+      <div id="regOtpInputSection" style="display:none;">
+        <div class="otp-display-box">
+          <span>OTP sent to <b id="targetRegPhoneText"></b></span>
+          <button type="button" class="change-phone-btn" onclick="resetToPhoneStep()">Change</button>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="regOtpInput">6-Digit Verification Code</label>
+          <input id="regOtpInput" type="text" inputmode="numeric" maxlength="6" placeholder="• • • • • •" class="otp-field-input">
+          <span id="devRegOtpTag" class="dev-badge-msg"></span>
+        </div>
+      </div>
+
+      <!-- Register Submit Button -->
+      <button id="btnRegSubmitAuth" type="submit" class="submit-glow-btn">
+        <span id="btnRegSubmitText">Register & Send OTP →</span>
+      </button>
+    </form>
+
+    <!-- 1-Tap Personas Section -->
+    <div class="persona-box">
+      <div class="persona-title">Or 1-Tap Quick Sample Login</div>
+      <div id="personaContainer" class="persona-list-grid"></div>
+    </div>
+  </main>
+
+  <!-- Core Scripts -->
+  <script src="js/core/config.js"></script>
+  <script src="js/core/shell.js"></script>
+  <script src="js/core/ui.js"></script>
+  <script src="js/core/map.js"></script>
+  <script src="js/core/operations.js"></script>
+  <script src="js/core/mock-server.js"></script>
+  <script src="js/core/api.js"></script>
+  <script src="js/core/page.js"></script>
+
+  <script>
+    if (location.protocol === "http:" && location.port === "5500") {
+      App.config = App.config || {};
+      App.config.mode = "demo";
+      App.config.lockMode = true;
+    }
+
+    const savedTheme = (() => {
+      try { return localStorage.getItem("foodwings.theme") || "dark"; } catch (err) { return "dark"; }
+    })();
+    document.documentElement.setAttribute("data-theme", savedTheme);
+    document.body.setAttribute("data-theme", savedTheme);
+    document.querySelectorAll("[data-theme-toggle]").forEach((button) => {
+      const updateToggle = () => {
+        const isLight = document.documentElement.getAttribute("data-theme") === "light";
+        button.textContent = isLight ? "Light mode" : "Dark mode";
+        button.setAttribute("aria-label", isLight ? "Switch to dark theme" : "Switch to light theme");
+      };
+      button.addEventListener("click", () => {
+        const next = document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light";
+        document.documentElement.setAttribute("data-theme", next);
+        document.body.setAttribute("data-theme", next);
+        try { localStorage.setItem("foodwings.theme", next); } catch (err) { /* ignore */ }
+        updateToggle();
+      });
+      updateToggle();
+    });
+
+    App.initPage();
+    document.getElementById("topLogo").innerHTML = App.logo(30);
+
+    // Pre-select role from URL param e.g. login.html?role=rider
+    const _urlRole = new URLSearchParams(location.search).get("role");
+    let activeRole = ["customer", "restaurant", "rider"].includes(_urlRole) ? _urlRole : "customer";
+    let activeMode = "login"; // "login" | "register"
+    let currentAuthStep = "phone"; // "phone" | "otp"
+    let verifiedPhone = "";
+
+    const PERSONAS_DATA = {
+      customer: [
+        { phone: "9845011111", name: "Ravi Kumar", note: "Customer · Jayanagar" },
+        { phone: "9845011112", name: "Ananya Rao", note: "Customer · Basavanagudi" }
+      ],
+      restaurant: [
+        { phone: "9845022221", name: "Manjunath Gowda", note: "Owner · Spice Route Biryani" },
+        { phone: "9845022222", name: "Lakshmi Iyer", note: "Owner · Udupi Grand Veg" }
+      ],
+      rider: [
+        { phone: "9845033331", name: "Suresh B", note: "Rider (Bike) · Jayanagar" },
+        { phone: "9845033332", name: "Prakash Naik", note: "Rider (Scooter) · Basavanagudi" }
+      ]
+    };
+
+    function showStatus(text, isError = false) {
+      const banner = document.getElementById("statusBanner");
+      banner.className = "status-msg-banner " + (isError ? "error" : "success");
+      banner.textContent = text;
+      banner.style.display = "block";
+    }
+
+    function renderPersonaList() {
+      const list = PERSONAS_DATA[activeRole] || [];
+      const cont = document.getElementById("personaContainer");
+      const { initials, esc } = App.ui;
+      cont.innerHTML = list.map(p => `
+        <button type="button" class="persona-btn-card" onclick="quickLogin('${p.phone}')">
+          <span class="p-avatar">${esc(initials(p.name))}</span>
+          <div class="p-text">
+            <b>${esc(p.name)}</b>
+            <span>${esc(p.note)}</span>
+          </div>
+          <span class="p-arrow">→</span>
+        </button>
+      `).join("");
+    }
+
+    // Role switcher
+    document.querySelectorAll(".role-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".role-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        activeRole = btn.dataset.role;
+
+        const icons = { customer: "🍔", restaurant: "🍳", rider: "🛵" };
+        const titles = {
+          customer: "Customer Sign In",
+          restaurant: "Kitchen Partner Portal",
+          rider: "Delivery Partner Sign In"
+        };
+        document.getElementById("roleIcon").textContent = icons[activeRole] || "🍔";
+        document.getElementById("authMainTitle").textContent = titles[activeRole] || "Welcome to FoodWings";
+
+        document.getElementById("customerExtraFields").style.display = activeRole === "customer" ? "block" : "none";
+        document.getElementById("restaurantExtraFields").style.display = activeRole === "restaurant" ? "block" : "none";
+        document.getElementById("riderExtraFields").style.display = activeRole === "rider" ? "block" : "none";
+
+        resetToPhoneStep();
+        renderPersonaList();
+      });
+    });
+
+    function setAuthMode(mode) {
+      activeMode = mode;
+      resetToPhoneStep();
+      document.getElementById("tabLogin").classList.toggle("active", mode === "login");
+      document.getElementById("tabRegister").classList.toggle("active", mode === "register");
+      document.getElementById("formSignIn").style.display = mode === "login" ? "block" : "none";
+      document.getElementById("formSignUp").style.display = mode === "register" ? "block" : "none";
+    }
+
+    function resetToPhoneStep() {
+      currentAuthStep = "phone";
+      document.getElementById("phoneInputSection").style.display = "block";
+      document.getElementById("otpInputSection").style.display = "none";
+      document.getElementById("btnSubmitText").textContent = "Send OTP →";
+      document.getElementById("btnSubmitAuth").disabled = false;
+
+      document.getElementById("regOtpInputSection").style.display = "none";
+      document.getElementById("btnRegSubmitText").textContent = "Register & Send OTP →";
+      document.getElementById("btnRegSubmitAuth").disabled = false;
+    }
+
+    async function handleFormSubmit(e) {
+      e.preventDefault();
+      const session = App.createSession(activeRole);
+      const api = App.createApi(session, activeRole, {
+        onError: (msg) => showStatus(msg, true),
+        onSuccess: (msg) => showStatus(msg, false)
+      });
+
+      if (activeMode === "login") {
+        if (currentAuthStep === "phone") {
+          const rawPhone = document.getElementById("phoneInput").value.replace(/\D/g, "");
+          if (rawPhone.length < 10) return showStatus("Please enter a valid 10-digit mobile number", true);
+          verifiedPhone = rawPhone;
+
+          document.getElementById("btnSubmitText").textContent = "Signing in...";
+          document.getElementById("btnSubmitAuth").disabled = true;
+
+          const res = await api.run("auth.requestOtp", { body: { phone: verifiedPhone, app: activeRole, purpose: "LOGIN" } });
+          document.getElementById("btnSubmitAuth").disabled = false;
+
+          if (res) {
+            const roleTarget = activeRole === "restaurant" ? "RESTAURANT_OWNER" : activeRole === "rider" ? "DELIVERY_PARTNER" : "CUSTOMER";
+            const verified = await api.run("auth.verifyOtp", { body: { phone: verifiedPhone, otp: res.dev_otp || "000000", role: roleTarget } });
+            if (verified) {
+              session.login(verified.token, { user_id: verified.user_id, name: verified.name, roles: verified.roles });
+              showStatus(`🎉 Welcome back, ${verified.name || "User"}! Redirecting...`);
+              setTimeout(() => {
+                const dest = activeRole === "customer" ? "customer.html" : activeRole === "restaurant" ? "restaurant.html" : "rider.html";
+                window.location.href = dest;
+              }, 400);
+            }
+          }
+        } else {
+          const otp = document.getElementById("otpInput").value.trim();
+          if (otp.length < 6) return showStatus("Please enter the 6-digit OTP", true);
+
+          document.getElementById("btnSubmitText").textContent = "Verifying...";
+          document.getElementById("btnSubmitAuth").disabled = true;
+
+          const roleTarget = activeRole === "restaurant" ? "RESTAURANT_OWNER" : activeRole === "rider" ? "DELIVERY_PARTNER" : "CUSTOMER";
+          const res = await api.run("auth.verifyOtp", { body: { phone: verifiedPhone, otp, role: roleTarget } });
+          document.getElementById("btnSubmitAuth").disabled = false;
+
+          if (res) {
+            session.login(res.token, { user_id: res.user_id, name: res.name, roles: res.roles });
+            showStatus(`🎉 Welcome back, ${res.name || "User"}! Logging you in...`);
+            setTimeout(() => {
+              const dest = activeRole === "customer" ? "customer.html" : activeRole === "restaurant" ? "restaurant.html" : "rider.html";
+              window.location.href = dest;
+            }, 600);
+          }
+        }
+      } else {
+        // Register Mode
+        if (currentAuthStep === "phone") {
+          const name = document.getElementById("regFullName").value.trim();
+          const rawPhone = document.getElementById("regPhoneInput").value.replace(/\D/g, "");
+          if (!name) return showStatus("Please enter your full name", true);
+          if (rawPhone.length < 10) return showStatus("Please enter a valid 10-digit mobile number", true);
+          verifiedPhone = rawPhone;
+
+          document.getElementById("btnRegSubmitText").textContent = "Creating account...";
+          document.getElementById("btnRegSubmitAuth").disabled = true;
+
+          const res = await api.run("auth.requestOtp", { body: { phone: verifiedPhone, app: activeRole, purpose: "REGISTER" } });
+          document.getElementById("btnRegSubmitAuth").disabled = false;
+
+          if (res) {
+            const email = document.getElementById("regEmailInput").value.trim() || null;
+            const roleTarget = activeRole === "restaurant" ? "RESTAURANT_OWNER" : activeRole === "rider" ? "DELIVERY_PARTNER" : "CUSTOMER";
+            const payload = { phone: verifiedPhone, otp: res.dev_otp || "000000", name, email, role: roleTarget };
+            if (activeRole === "restaurant") {
+              payload.restaurant_name = document.getElementById("regRestName").value.trim() || `${name}'s Kitchen`;
+              payload.cuisines = document.getElementById("regCuisines").value.trim() || "Multi-Cuisine";
+            } else if (activeRole === "rider") {
+              payload.vehicle_type = document.getElementById("regVehicle").value;
+              payload.vehicle_no = document.getElementById("regVehicleNo").value.trim() || null;
+            }
+
+            const verified = await api.run("auth.verifyOtp", { body: payload });
+            if (verified) {
+              session.login(verified.token, { user_id: verified.user_id, name: verified.name, roles: verified.roles });
+              showStatus(`🎉 Account created! Welcome, ${verified.name}. Redirecting...`);
+              setTimeout(() => {
+                const dest = activeRole === "customer" ? "customer.html" : activeRole === "restaurant" ? "restaurant.html" : "rider.html";
+                window.location.href = dest;
+              }, 500);
+            }
+          }
+        } else {
+          const otp = document.getElementById("regOtpInput").value.trim();
+          const name = document.getElementById("regFullName").value.trim();
+          const email = document.getElementById("regEmailInput").value.trim() || null;
+          const roleTarget = activeRole === "restaurant" ? "RESTAURANT_OWNER" : activeRole === "rider" ? "DELIVERY_PARTNER" : "CUSTOMER";
+
+          const payload = { phone: verifiedPhone, otp, name, email, role: roleTarget };
+          if (activeRole === "restaurant") {
+            payload.restaurant_name = document.getElementById("regRestName").value.trim() || `${name}'s Kitchen`;
+            payload.cuisines = document.getElementById("regCuisines").value.trim() || "Multi-Cuisine";
+          } else if (activeRole === "rider") {
+            payload.vehicle_type = document.getElementById("regVehicle").value;
+            payload.vehicle_no = document.getElementById("regVehicleNo").value.trim() || null;
+          }
+
+          document.getElementById("btnRegSubmitText").textContent = "Creating account...";
+          document.getElementById("btnRegSubmitAuth").disabled = true;
+
+          const res = await api.run("auth.verifyOtp", { body: payload });
+          document.getElementById("btnRegSubmitAuth").disabled = false;
+
+          if (res) {
+            session.login(res.token, { user_id: res.user_id, name: res.name, roles: res.roles });
+            showStatus(`🎉 Account created! Welcome, ${res.name}. Redirecting...`);
+            setTimeout(() => {
+              const dest = activeRole === "customer" ? "customer.html" : activeRole === "restaurant" ? "restaurant.html" : "rider.html";
+              window.location.href = dest;
+            }, 700);
+          }
+        }
+      }
+    }
+
+    async function quickLogin(phone) {
+      const session = App.createSession(activeRole);
+      const api = App.createApi(session, activeRole, {
+        onError: (msg) => showStatus(msg, true)
+      });
+      showStatus("Logging in with demo persona...");
+      const resOtp = await api.run("auth.requestOtp", { body: { phone, app: activeRole, purpose: "LOGIN" } });
+      if (!resOtp) return;
+
+      const roleTarget = activeRole === "restaurant" ? "RESTAURANT_OWNER" : activeRole === "rider" ? "DELIVERY_PARTNER" : "CUSTOMER";
+      const res = await api.run("auth.verifyOtp", { body: { phone, otp: resOtp.dev_otp, role: roleTarget } });
+      if (res) {
+        session.login(res.token, { user_id: res.user_id, name: res.name, roles: res.roles });
+        showStatus(`🎉 Logged in as ${res.name}! Redirecting...`);
+        setTimeout(() => {
+          const dest = activeRole === "customer" ? "customer.html" : activeRole === "restaurant" ? "restaurant.html" : "rider.html";
+          window.location.href = dest;
+        }, 500);
+      }
+    }
+
+    // Check query params
+    const queryParams = new URLSearchParams(window.location.search);
+    const initialRole = queryParams.get("role");
+    if (initialRole && PERSONAS_DATA[initialRole]) {
+      const pill = document.querySelector(`.role-btn[data-role="${initialRole}"]`);
+      if (pill) pill.click();
+    } else {
+      renderPersonaList();
+    }
+
+    if (queryParams.get("mode") === "register") setAuthMode("register");
+  </script>
+</body>
+</html>

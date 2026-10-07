@@ -1,0 +1,139 @@
+/* =====================================================================
+   shell.js - turns any <div> into one of the three apps
+   ---------------------------------------------------------------------
+     App.mountApp(document.getElementById("x"), "customer")    // or "restaurant", "rider"
+
+   Each app has its own login, its own screens and its own colour, but all
+   three call the same API (and the same database).
+
+   Every screen follows the same 4-part pattern:
+     state, load(), render(), actions
+   and buttons are wired the same way everywhere:
+     <button data-action="accept">   -> screen.actions.accept(button)
+     <form data-action="pay">        -> screen.actions.pay(form)
+     <input data-change="open">      -> screen.actions.open(input)
+   ===================================================================== */
+(function () {
+  App.APPS = {
+    customer:   { name: "FoodWings", tag: "",        tagline: "Food delivery",         roles: ["CUSTOMER"] },
+    restaurant: { name: "FoodWings", tag: "Partner", tagline: "For restaurants",       roles: ["RESTAURANT_OWNER", "RESTAURANT_STAFF"] },
+    rider:      { name: "FoodWings", tag: "Rider",   tagline: "For delivery partners", roles: ["DELIVERY_PARTNER"] },
+  };
+
+  // FoodWings mark: a plate with a wing. Inline SVG so it works offline and in every theme.
+  App.logo = (size = 30) => `<svg class="logo" width="${size}" height="${size}" viewBox="0 0 40 40" aria-hidden="true">
+      <rect x="1" y="1" width="38" height="38" rx="11" class="logo-bg"/>
+      <circle cx="16" cy="23" r="9.5" class="logo-plate"/><circle cx="16" cy="23" r="5" class="logo-bg"/>
+      <path class="logo-wing" d="M21 18c3-7 9-10 15-10-2 2-3 3.4-3.6 5 1.6-.4 3-.4 4.2 0-2 1.4-3.4 2.8-4.2 4.4 1.3-.2 2.4 0 3.4.5-3.6 2.6-8.6 3.6-14.8 2.1z"/>
+    </svg>`;
+
+  App.mountApp = function (root, kind) {
+    const meta = App.APPS[kind];
+    root.classList.add("app");
+    root.dataset.kind = kind;
+    root.innerHTML = `<header class="app-bar"></header><main class="app-main"></main><div class="app-toasts" aria-live="polite"></div>`;
+    const bar = root.querySelector(".app-bar"), main = root.querySelector(".app-main");
+
+    const fb = App.ui.scopedFeedback(root);
+    const session = App.createSession(kind);
+    const ctx = { kind, meta, root, session, toast: fb.toast, modal: fb.modal, closeModal: fb.closeModal, busy: App.ui.busy };
+    ctx.api = App.createApi(session, kind, {
+      onError: (msg, code) => fb.toast(msg, true, code),
+      onSuccess: (msg) => fb.toast(msg),
+      onUnauthorized: () => { session.logout(); fb.toast("Session expired. Please log in again.", true); go(); },
+    });
+
+    let screens = null, screen = null;
+    const freshScreens = () => ({ login: App.screens.login(ctx), home: App.screens[kind](ctx), noRole: App.screens.noRole(ctx) });
+
+    function currentScreen() {
+      if (!session.token()) return screens.login;
+      return meta.roles.some((r) => session.has(r)) ? screens.home : screens.noRole;
+    }
+
+    function renderBar() {
+      const u = session.user(), { esc, initials } = App.ui;
+      bar.innerHTML = `
+        <div class="brand">${App.logo()}<b>${esc(meta.name)}</b>${meta.tag ? `<span class="apptag-pill">${esc(meta.tag)}</span>` : `<span>${esc(meta.tagline)}</span>`}</div>
+        ${u ? `<div class="who"><span class="avatar sm">${esc(initials(u.name))}</span><span class="who-name">${esc(u.name || "New user")}</span>
+                <button class="linkbtn small" data-bar="logout">Log out</button></div>` : ""}`;
+    }
+
+    async function refresh(reload = false) {
+      if (!screen) return;
+      if (reload) await screen.load();
+      const y = main.scrollTop;
+      main.innerHTML = screen.render();
+      App.maps?.hydrate(main);
+      main.scrollTop = y;
+    }
+
+    async function go() {
+      if (!screens) screens = freshScreens();
+      screen = currentScreen();
+      renderBar();
+      main.innerHTML = `<div class="empty">Loading…</div>`;
+      await screen.load();
+      main.innerHTML = screen.render();
+      App.maps?.hydrate(main);
+      main.scrollTop = 0;
+    }
+
+    ctx.refresh = refresh;
+    ctx.go = go;
+    ctx.logout = () => { session.logout(); screens = freshScreens(); fb.toast("Logged out"); go(); };
+
+    // ---------- event wiring (same for every screen) ----------
+    root.addEventListener("click", async (e) => {
+      if (e.target.closest("[data-bar=logout]")) return ctx.logout();
+      const el = e.target.closest(".app-main [data-action]");
+      if (!el || el.tagName === "FORM" || !screen?.actions[el.dataset.action]) return;
+      e.preventDefault();
+      await screen.actions[el.dataset.action](el, e);
+    });
+    root.addEventListener("submit", async (e) => {
+      const form = e.target.closest(".app-main form[data-action]");
+      if (!form) return;
+      e.preventDefault();
+      await App.ui.busy(form.querySelector("[type=submit]"), () => screen.actions[form.dataset.action](form, e));
+    });
+    root.addEventListener("change", async (e) => {
+      const el = e.target.closest(".app-main [data-change]");
+      if (el && screen?.actions[el.dataset.change]) await screen.actions[el.dataset.change](el, e);
+    });
+
+    // ---------- stay in sync with the other apps ----------
+    let pending = null;
+    const syncSoon = () => {
+      clearTimeout(pending);
+      pending = setTimeout(async () => {
+        if (!screen?.poll?.() || root.querySelector(".backdrop")) return;
+        ctx.api.polling = true;
+        try { await refresh(true); } finally { ctx.api.polling = false; }
+      }, 350);
+    };
+    // another app on this page changed something -> refresh now
+    App.bus.on((entry) => { if (entry.app !== kind && entry.op.method !== "GET" && entry.response?.success) syncSoon(); });
+    // other tabs / the live server -> refresh every few seconds
+    setInterval(() => { if (document.visibilityState === "visible") syncSoon(); }, App.config.pollMs);
+
+    go();
+    return ctx;
+  };
+
+  // shown when someone logs into an app their account has no role for
+  App.screens = App.screens || {};
+  App.screens.noRole = (ctx) => ({
+    async load() {},
+    render() {
+      const u = ctx.session.user();
+      const what = { customer: "a customer", restaurant: "restaurant staff", rider: "a delivery partner" }[ctx.kind];
+      return `<div class="center-card stack">
+        <h2>This account is not ${what}</h2>
+        <p class="muted">${App.ui.esc(u?.name || "This number")} has the roles: ${App.ui.esc((u?.roles || []).join(", ") || "none")}.
+        Log out and use one of the sample accounts for ${App.ui.esc(ctx.meta.name + (ctx.meta.tag ? " " + ctx.meta.tag : ""))}.</p>
+        <button class="btn primary" data-action="out">Log out</button></div>`;
+    },
+    actions: { out() { ctx.logout(); } },
+  });
+})();

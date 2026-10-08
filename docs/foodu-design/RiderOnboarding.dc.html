@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Rider: KYC pending</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body{margin:0;font-family:'Outfit',sans-serif;color:#111311}
+a{color:#0E7A3C}a:hover{color:#095A2C}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes flip{0%,40%{transform:rotate(0)}50%,90%{transform:rotate(180deg)}100%{transform:rotate(360deg)}}
+@keyframes pop{0%{transform:scale(.6)}70%{transform:scale(1.15)}100%{transform:scale(1)}}
+.card{background:#fff;border-radius:20px;box-shadow:0 1px 2px rgba(17,19,17,.06),0 8px 20px rgba(17,19,17,.06);animation:fadeUp .45s both}
+.doc{display:flex;flex-direction:column;gap:8px;padding:12px 14px;border-radius:14px;background:#F4F7F5}
+.doc .r{display:flex;align-items:center;gap:12px}
+.doc b{flex:1;font-size:15px}
+.st{font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;background:#E7F6EC;color:#0E7A3C;animation:pop .3s both}
+.up{min-height:36px;padding:0 14px;border-radius:999px;border:1.5px solid #0E8A42;background:#fff;color:#0E7A3C;font-family:'Outfit',sans-serif;font-weight:700;font-size:13px}
+.bar{height:6px;border-radius:999px;background:#E4E8E5;overflow:hidden}.bar i{display:block;height:100%;background:#13A04F;transition:width .1s linear}
+.glass{display:inline-block;animation:flip 2.4s ease-in-out infinite}
+.btn{display:flex;align-items:center;justify-content:center;min-height:56px;border-radius:999px;border:0;font-family:'Outfit',sans-serif;font-weight:800;font-size:17px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; background: #F4F7F5; display: flex; flex-direction: column; overflow: hidden">
+  <header style="background: linear-gradient(160deg, #1DB860, #0F8E45); color: #fff; padding: 20px 20px 56px; display: flex; flex-direction: column; gap: 14px">
+    <div style="display: flex; justify-content: space-between; align-items: center">
+      <span style="display: flex; flex-direction: column"><b style="font-size: 22px">Foodu</b><span style="font-size: 11px; letter-spacing: .14em; color: #DFF7E8">RIDER HUD</span></span>
+      <span aria-label="Imran Khan" style="width: 40px; height: 40px; border-radius: 50%; background: #fff; color: #13A04F; font-weight: 800; display: flex; align-items: center; justify-content: center">IK</span>
+    </div>
+    <span style="font-weight: 800; font-size: 26px; line-height: 1.15">{{headline}}</span>
+    <div class="bar" style="background: rgba(255,255,255,.3)"><i style="width: {{progress}}; background: #fff"></i></div>
+  </header>
+  <main style="flex: 1; padding: 0 16px 16px; margin-top: -40px; display: flex; flex-direction: column; gap: 12px; overflow: hidden">
+    <section class="card" style="padding: 16px 18px; display: flex; gap: 12px; align-items: center">
+      <span class="glass" style="font-size: 26px; width: 36px; height: 36px; border-radius: 50%; background: #FFF4D6; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7A4B00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12M6 21h12M7 3c0 5 10 5 10 9s-10 4-10 9M17 3c0 5-10 5-10 9"></path></svg></span>
+      <span style="display: flex; flex-direction: column; gap: 2px"><b style="font-size: 16px">{{statusTitle}}</b><span style="font-size: 13px; color: #5D6560">{{statusText}}</span></span>
+    </section>
+    <section class="card" style="padding: 14px; display: flex; flex-direction: column; gap: 10px; animation-delay: .06s">
+      <b style="font-size: 16px; padding: 0 2px">Bike · KA03MN4455</b>
+      <sc-for list="{{docs}}" as="d" hint-placeholder-count="4">
+        <div class="doc">
+          <div class="r"><b>{{d.name}}</b>
+            <sc-if value="{{d.done}}" hint-placeholder-val="{{ false }}"><span class="st">Uploaded ✓</span></sc-if>
+            <sc-if value="{{d.idle}}" hint-placeholder-val="{{ true }}"><button type="button" class="up" onClick="{{d.upload}}">Upload</button></sc-if>
+            <sc-if value="{{d.busy}}" hint-placeholder-val="{{ false }}"><span style="font-size: 13px; font-weight: 700; color: #0E7A3C">{{d.pct}}</span></sc-if>
+          </div>
+          <sc-if value="{{d.busy}}" hint-placeholder-val="{{ false }}"><div class="bar"><i style="width: {{d.pct}}"></i></div></sc-if>
+        </div>
+      </sc-for>
+    </section>
+    <section class="card" style="padding: 14px 16px; display: flex; gap: 12px; align-items: center; animation-delay: .12s">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0E7A3C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex: none"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>
+      <span style="flex: 1; font-size: 14px">{{locText}}</span>
+      <sc-if value="{{locOff}}" hint-placeholder-val="{{ true }}"><button type="button" class="up" onClick="{{allowLoc}}">Allow</button></sc-if>
+    </section>
+    <button type="button" class="btn" disabled style="margin-top: auto; background: #C9D1CC; color: #4A524D">Go online (after verification)</button>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+const DOCS = ['Driving licence', 'Vehicle RC', 'ID proof', 'Your photo'];
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { prog: { 'Driving licence': 100, 'Vehicle RC': 100, 'ID proof': -1, 'Your photo': -1 }, loc: false }; }
+  componentDidMount() {
+    this.t = setInterval(() => {
+      const prog = { ...this.state.prog }; let changed = false;
+      for (const k of DOCS) if (prog[k] >= 0 && prog[k] < 100) { prog[k] = Math.min(100, prog[k] + 7); changed = true; }
+      if (changed) this.setState({ prog });
+    }, 90);
+  }
+  componentWillUnmount() { clearInterval(this.t); }
+  renderVals() {
+    const s = this.state; const done = DOCS.filter((k) => s.prog[k] >= 100).length;
+    const all = done === 4;
+    return {
+      headline: all ? 'All set, Imran!' : 'Almost there, Imran', progress: (done / 4 * 100) + '%',
+      statusTitle: all ? 'Documents under review' : 'KYC pending', statusText: all ? 'Usually within 24 hours. We will notify you.' : `${4 - done} document${4 - done === 1 ? '' : 's'} still needed`,
+      docs: DOCS.map((name) => { const v = s.prog[name]; return { name, done: v >= 100, idle: v < 0, busy: v >= 0 && v < 100, pct: Math.max(0, v) + '%',
+        upload: () => this.setState({ prog: { ...s.prog, [name]: 0 } }) }; }),
+      locOff: !s.loc, locText: s.loc ? 'Location is on. Nearby orders can reach you.' : 'Allow location so nearby orders can be offered to you.',
+      allowLoc: () => this.setState({ loc: true })
+    };
+  }
+}
+</script>
+</body>
+</html>

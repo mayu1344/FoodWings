@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Admin: approvals</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body{margin:0;font-family:'Outfit',sans-serif;color:#111311;background:#F4F7F5}
+a{color:#0E7A3C}a:hover{color:#095A2C}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes out{to{opacity:0;transform:translateX(60px) scale(.96)}}
+@keyframes stamp{0%{transform:scale(2) rotate(-12deg);opacity:0}100%{transform:scale(1) rotate(-12deg);opacity:1}}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 18px;border-radius:999px;font-family:'Outfit',sans-serif;font-weight:700;font-size:15px;border:0;text-decoration:none;box-sizing:border-box;transition:transform .15s,opacity .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn[disabled]{opacity:.4;transform:none}
+.btn-green{background:#0E8A42;color:#fff}.btn-ghost{background:#fff;color:#111311;border:1.5px solid #D6DCD8}.btn-red{background:#fff;color:#A8261B;border:1.5px solid #E8B4AE}
+.card{background:#fff;border-radius:22px;box-shadow:0 1px 2px rgba(17,19,17,.06),0 8px 22px rgba(17,19,17,.06);animation:fadeUp .45s both}
+.leaving{animation:out .5s .6s both}
+.tab{min-height:44px;padding:0 18px;border-radius:999px;border:0;background:transparent;font-family:'Outfit',sans-serif;font-weight:700;font-size:15px;color:#C9D1CC;transition:all .2s}
+.tab.on{background:#13A04F;color:#fff}
+.kv{display:flex;flex-direction:column;gap:2px;font-size:14px}.kv span{color:#5D6560;font-size:12px;font-weight:700;letter-spacing:.06em}
+.doc{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;padding:6px 10px;border-radius:10px;background:#E7F6EC;color:#0E7A3C}
+.doc.miss{background:#FFF4D6;color:#7A4B00}
+.stamp{position:absolute;right:28px;top:22px;padding:6px 16px;border:3px solid;border-radius:10px;font-weight:800;font-size:22px;letter-spacing:.1em;animation:stamp .35s both;background:rgba(255,255,255,.85)}
+.photo{width:120px;height:96px;border-radius:16px;overflow:hidden;flex:none}.photo img{width:100%;height:100%;object-fit:cover}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div style="min-height: 900px">
+  <header style="background: #111311; padding: 14px 24px">
+    <div style="max-width: 1280px; margin: 0 auto; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+      <span style="display: flex; align-items: center; gap: 10px; color: #fff"><b style="font-size: 24px">Foodu</b><span style="font-size: 12px; letter-spacing: .14em; color: #9FE0B8">ADMIN</span></span>
+      <div style="display: flex; gap: 4px; background: #1E221F; border-radius: 999px; padding: 4px">
+        <sc-for list="{{tabs}}" as="t" hint-placeholder-count="2"><button type="button" class="{{t.cls}}" onClick="{{t.pick}}">{{t.label}}</button></sc-for>
+      </div>
+      <span style="color: #C9D1CC; font-size: 15px">Ops Admin</span>
+    </div>
+  </header>
+  <main style="max-width: 1280px; margin: 0 auto; padding: 28px 24px 48px; display: flex; flex-direction: column; gap: 20px">
+    <div>
+      <h1 style="margin: 0; font-weight: 800; font-size: 32px">Waiting for approval</h1>
+      <span style="color: #5D6560; font-size: 15px">New restaurants stay hidden and new riders cannot go online until you approve them.</span>
+    </div>
+    <sc-if value="{{showRest}}" hint-placeholder-val="{{ true }}">
+      <sc-for list="{{rests}}" as="r" hint-placeholder-count="1">
+        <article class="{{r.cls}}" style="padding: 22px 24px; display: flex; flex-wrap: wrap; gap: 24px; align-items: center; position: relative">
+          <span class="photo"><img src="{{img.cafe}}" alt=""></span>
+          <div style="flex: 1 1 240px; display: flex; flex-direction: column; gap: 4px"><b style="font-size: 20px">Nandini Tiffin Centre</b><span style="font-size: 14px; color: #5D6560">South Indian · 3rd Cross, JP Nagar 2nd Phase, Bengaluru</span></div>
+          <div class="kv"><span>OWNER</span>Shivanand Hiremath · +91 ••••••2225</div>
+          <div class="kv"><span>FSSAI</span>11221333000104</div>
+          <div class="kv"><span>GST</span>Not given</div>
+          <div style="display: flex; gap: 10px"><button type="button" class="btn btn-red" onClick="{{r.reject}}">Reject</button><button type="button" class="btn btn-green" onClick="{{r.approve}}">Approve</button></div>
+          <sc-if value="{{r.stamped}}" hint-placeholder-val="{{ false }}"><span class="stamp" style="color: {{r.stampColor}}; border-color: {{r.stampColor}}">{{r.stampText}}</span></sc-if>
+        </article>
+      </sc-for>
+      <sc-if value="{{restEmpty}}" hint-placeholder-val="{{ false }}"><div class="card" style="padding: 40px; text-align: center; color: #5D6560">All caught up. No restaurants waiting.</div></sc-if>
+    </sc-if>
+    <sc-if value="{{showRiders}}" hint-placeholder-val="{{ false }}">
+      <sc-for list="{{riders}}" as="r" hint-placeholder-count="1">
+        <article class="{{r.cls}}" style="padding: 22px 24px; display: flex; flex-wrap: wrap; gap: 24px; align-items: center; position: relative">
+          <span style="width: 72px; height: 72px; border-radius: 50%; background: #FFD7A8; color: #6B3A00; font-weight: 800; font-size: 22px; display: flex; align-items: center; justify-content: center">IK</span>
+          <div style="flex: 1 1 240px; display: flex; flex-direction: column; gap: 4px"><b style="font-size: 20px">Imran Khan</b><span style="font-size: 14px; color: #5D6560">Bengaluru · Bike · KA03MN4455</span></div>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px">
+            <sc-for list="{{r.docs}}" as="d" hint-placeholder-count="4"><span class="{{d.cls}}">{{d.label}}</span></sc-for>
+          </div>
+          <div style="display: flex; gap: 10px"><button type="button" class="btn btn-ghost" onClick="{{r.remind}}">{{r.remindText}}</button><button type="button" class="btn btn-red" onClick="{{r.reject}}">Reject</button><button type="button" class="btn btn-green" disabled="{{r.cantVerify}}" onClick="{{r.approve}}">Verify</button></div>
+          <sc-if value="{{r.stamped}}" hint-placeholder-val="{{ false }}"><span class="stamp" style="color: {{r.stampColor}}; border-color: {{r.stampColor}}">{{r.stampText}}</span></sc-if>
+        </article>
+      </sc-for>
+      <sc-if value="{{riderEmpty}}" hint-placeholder-val="{{ false }}"><div class="card" style="padding: 40px; text-align: center; color: #5D6560">All caught up. No riders waiting.</div></sc-if>
+      <p style="margin: 0; font-size: 13px; color: #5D6560">Verify unlocks once all four documents are uploaded.</p>
+    </sc-if>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+const IMG = { cafe: '/_blob/8e0b0e7e9de8713f1314df85ad0f40df' };
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { tab: 'rest', rest: '', rider: '', restGone: false, riderGone: false, reminded: false }; }
+  decide(key, val) { this.setState({ [key]: val }); setTimeout(() => this.setState({ [key + 'Gone']: true }), 1100); }
+  renderVals() {
+    const s = this.state;
+    const stamp = (v) => ({ stamped: !!v, stampText: v === 'ok' ? 'APPROVED' : 'REJECTED', stampColor: v === 'ok' ? '#0E8A42' : '#A8261B', cls: v ? 'card leaving' : 'card' });
+    return {
+      img: IMG,
+      tabs: [['rest', `Restaurants (${s.restGone ? 0 : 1})`], ['rider', `Riders (${s.riderGone ? 0 : 1})`]].map(([id, label]) => ({ label, cls: s.tab === id ? 'tab on' : 'tab', pick: () => this.setState({ tab: id }) })),
+      showRest: s.tab === 'rest', showRiders: s.tab === 'rider',
+      rests: s.restGone ? [] : [{ ...stamp(s.rest), approve: () => this.decide('rest', 'ok'), reject: () => this.decide('rest', 'no') }],
+      restEmpty: s.restGone,
+      riders: s.riderGone ? [] : [{ ...stamp(s.rider), cantVerify: !s.reminded,
+        docs: [['Licence ✓', true], ['RC ✓', true], [s.reminded ? 'ID proof ✓' : 'ID proof missing', s.reminded], [s.reminded ? 'Photo ✓' : 'Photo missing', s.reminded]].map(([label, ok]) => ({ label, cls: ok ? 'doc' : 'doc miss' })),
+        remindText: s.reminded ? 'Documents received' : 'Remind rider', remind: () => this.setState({ reminded: true }),
+        approve: () => this.decide('rider', 'ok'), reject: () => this.decide('rider', 'no') }],
+      riderEmpty: s.riderGone
+    };
+  }
+}
+</script>
+</body>
+</html>

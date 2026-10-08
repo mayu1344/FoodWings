@@ -1,0 +1,101 @@
+/* =====================================================================
+   Foodu Motion & Micro-Animations System (Exact UI Design Spec)
+   ===================================================================== */
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes drop {
+  from { opacity: 0; transform: translateY(-16px) scale(0.97); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(19, 160, 79, 0.55); }
+  50% { box-shadow: 0 0 0 8px rgba(19, 160, 79, 0); }
+}
+
+@keyframes ring {
+  0%, 100% { transform: rotate(0); }
+  20% { transform: rotate(-18deg); }
+  40% { transform: rotate(16deg); }
+  60% { transform: rotate(-10deg); }
+  80% { transform: rotate(6deg); }
+}
+
+@keyframes heart {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.35); }
+  100% { transform: scale(1); }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(30px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes count {
+  from { transform: translateY(8px); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+
+@keyframes kenburns {
+  from { transform: scale(1.05); }
+  to { transform: scale(1.18) translate(-2%, -2%); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes pulse-pin {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(19, 160, 79, 0.7); }
+  70% { transform: scale(1.05); box-shadow: 0 0 0 14px rgba(19, 160, 79, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(19, 160, 79, 0); }
+}
+
+@keyframes toast {
+  0% { opacity: 0; transform: translate(-50%, 20px); }
+  15%, 85% { opacity: 1; transform: translate(-50%, 0); }
+  100% { opacity: 0; transform: translate(-50%, 10px); }
+}
+
+@keyframes sheet {
+  from { opacity: 0; transform: translateY(30px) scale(0.97); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes draw {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes shake {
+  20%, 60% { transform: translateX(-8px); }
+  40%, 80% { transform: translateX(8px); }
+}
+
+/* Reusable animation utility classes */
+.fadeUp { animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.drop { animation: drop 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+.kenburns { animation: kenburns 14s infinite alternate ease-in-out; }
+.bell { animation: ring 1s 2; }
+.heart-pop { animation: heart 0.45s ease; }
+.shimmer-bg {
+  background: linear-gradient(90deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0.1) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 2.5s infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

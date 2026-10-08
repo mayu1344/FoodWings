@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#13A04F">
+  <title>Foodu — Rider HUD</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/motion.css">
+</head>
+<body style="background: #E9EEEB; display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px 0;">
+  <div class="solo" data-kind="rider">
+    <div id="app"></div>
+    <aside id="inspector"></aside>
+  </div>
+
+  <script src="js/core/config.js"></script>
+  <script src="js/core/ui.js"></script>
+  <script src="js/core/map.js"></script>
+  <script src="js/core/operations.js"></script>
+  <script src="js/core/mock-server.js"></script>
+  <script src="js/core/api.js"></script>
+  <script src="js/core/gateway-sdk.js"></script>
+  <script src="js/core/shell.js"></script>
+  <script src="js/core/inspector.js"></script>
+  <script src="js/core/page.js"></script>
+  <script src="js/screens/login.js"></script>
+  <script src="js/screens/customer.js"></script>
+  <script src="js/screens/restaurant.js"></script>
+  <script src="js/screens/rider.js"></script>
+  <script>
+    App.initPage();
+    App.mountApp(document.getElementById("app"), "rider");
+  </script>
+</body>
+</html>

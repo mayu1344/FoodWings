@@ -1,54 +1,34 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#0a0a0c">
-  <title>FoodWings — Customer App</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=Manrope:wght@500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap">
-  <!-- Map library (real street maps) -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-  <link rel="stylesheet" href="css/styles.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Foodu · Order food</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="css/foodu.css">
+<link rel="stylesheet" href="css/customer.css">
 </head>
 <body>
-  <div class="solo" data-kind="customer">
-    <div class="announce">
-      <a href="index.html" style="color:var(--yellow);font-weight:800;text-decoration:none;display:inline-flex;align-items:center;gap:4px;">‹ All 3 Apps</a>
-      <span style="color:rgba(255,255,255,0.2);">|</span>
-      <nav class="solo-nav" style="display:inline-flex;gap:6px;">
-        <a href="customer.html" style="color:var(--yellow);font-weight:800;text-decoration:none;padding:2px 8px;border-radius:4px;background:rgba(255,214,10,0.15);border:1px solid rgba(255,214,10,0.3);">Customer</a>
-        <a href="restaurant.html" style="color:#94a3b8;font-weight:700;text-decoration:none;padding:2px 8px;">Restaurant</a>
-        <a href="rider.html" style="color:#94a3b8;font-weight:700;text-decoration:none;padding:2px 8px;">Rider</a>
-      </nav>
-      <span class="spacer"></span>
-      <a href="login.html?role=customer" class="nav-auth-btn" style="font-size:0.8rem;padding:4px 10px;">👤 Sign In / Register</a>
-      <button class="modebadge" data-page="mode">Live API</button>
-      <button data-page="reset">Reset demo data ↺</button>
+<header class="topbar">
+  <div class="wrap row between wrapf" style="gap:14px">
+    <a class="brand" href="#/home"><span class="logo" id="logo"></span>Foodu</a>
+    <label class="addr" title="Deliver to">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+      <select id="addrSel" aria-label="Delivery address"></select>
+    </label>
+    <div class="hsearch grow" id="hsearch">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5D6560" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" class="inp" placeholder="Search restaurants or cuisines" aria-label="Search">
     </div>
-    <div id="app"></div>
-    <aside id="inspector"></aside>
+    <nav class="row" style="gap:10px">
+      <a class="lnk" href="#/orders">My orders</a>
+      <a class="btn btn-dark sm" id="cartBtn" href="#/checkout">Cart <b id="cartCount" class="cnt">0</b></a>
+      <button class="avatar" id="me" type="button" title="Sign out" style="border:0"></button>
+    </nav>
   </div>
-  <script src="js/core/config.js"></script>
-  <script src="js/core/ui.js"></script>
-  <script src="js/core/map.js"></script>
-  <script src="js/core/operations.js"></script>
-  <script src="js/core/mock-server.js"></script>
-  <script src="js/core/api.js"></script>
-  <script src="js/core/gateway-sdk.js"></script>
-  <script src="js/core/shell.js"></script>
-  <script src="js/core/inspector.js"></script>
-  <script src="js/core/page.js"></script>
-  <script src="js/screens/login.js"></script>
-  <script src="js/screens/customer.js"></script>
-  <script src="js/screens/restaurant.js"></script>
-  <script src="js/screens/rider.js"></script>
-  <script>
-    App.initPage();
-    App.mountApp(document.getElementById("app"), "customer");
-    App.mountInspector(document.getElementById("inspector"));
-  </script>
+</header>
+<main class="wrap" id="view" style="padding-top:24px;padding-bottom:60px"></main>
+<script src="js/foodu.js"></script>
+<script src="js/customer.js"></script>
 </body>
 </html>

@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Checkout and payment</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body{margin:0;font-family:'Outfit',sans-serif;color:#111311;background:#F4F7F5}
+a{color:#0E7A3C}a:hover{color:#095A2C}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes shake{10%,90%{transform:translateX(-2px)}20%,80%{transform:translateX(4px)}30%,50%,70%{transform:translateX(-8px)}40%,60%{transform:translateX(8px)}}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes ring{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes conf{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(160px) rotate(540deg);opacity:0}}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:54px;padding:0 24px;border-radius:999px;font-family:'Outfit',sans-serif;font-weight:700;font-size:17px;border:0;text-decoration:none;box-sizing:border-box;transition:transform .2s,background .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn-green{background:#0E8A42;color:#fff}.btn-green:hover{color:#fff;background:#0B7337}
+.btn-dark{background:#111311;color:#fff}.btn-dark:hover{color:#fff}
+.card{background:#fff;border-radius:24px;box-shadow:0 1px 2px rgba(17,19,17,.06),0 10px 28px rgba(17,19,17,.06);animation:fadeUp .5s both}
+.inp{min-height:50px;width:100%;border:1.5px solid #D6DCD8;border-radius:14px;padding:0 14px;font-family:'Outfit',sans-serif;font-size:16px;font-weight:500;color:#111311;background:#fff;box-sizing:border-box;transition:border .2s,box-shadow .2s}
+.inp:focus{outline:none;border-color:#13A04F;box-shadow:0 0 0 4px rgba(19,160,79,.15)}
+.lbl{font-weight:600;font-size:14px}.f{display:flex;flex-direction:column;gap:6px}
+.opt{display:flex;gap:14px;align-items:flex-start;padding:16px 18px;border:1.5px solid #D6DCD8;border-radius:16px;background:#fff;transition:border .2s,background .2s,transform .2s;cursor:pointer}
+.opt:hover{transform:translateY(-2px)}
+.opt.on{border-color:#0E8A42;background:#F3FBF6;box-shadow:0 8px 20px rgba(19,160,79,.12)}
+.opt input{width:20px;height:20px;accent-color:#0E8A42;margin:2px 0 0}
+.num{width:30px;height:30px;border-radius:50%;background:#111311;color:#fff;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center}
+.row{display:flex;justify-content:space-between;font-size:16px}
+.photo{overflow:hidden;background:#BFE6CD}.photo img{width:100%;height:100%;object-fit:cover;display:block}
+.cardviz{border-radius:18px;padding:20px;color:#fff;background:linear-gradient(135deg,#111311 0%,#1F3A2B 60%,#13A04F 130%);min-height:150px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 16px 32px rgba(17,19,17,.25);transition:transform .4s}
+.cardviz:hover{transform:rotateX(6deg) rotateY(-8deg)}
+.shake{animation:shake .5s}
+.spin{width:22px;height:22px;border-radius:50%;border:3px solid rgba(255,255,255,.35);border-top-color:#fff;animation:spin .8s linear infinite}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div style="min-height: 1140px; position: relative">
+  <header style="background: #13A04F; padding: 14px 24px">
+    <div style="max-width: 1280px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 16px">
+      <a href="CustomerMenu.dc.html" style="display: flex; align-items: center; gap: 10px; color: #fff; text-decoration: none">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg>
+        <span style="font-weight: 800; font-size: 26px">Foodu</span>
+      </a>
+      <span style="color: #fff; font-weight: 700; font-size: 18px; display: flex; align-items: center; gap: 8px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>Secure checkout</span>
+    </div>
+  </header>
+
+  <main style="max-width: 1280px; margin: 0 auto; padding: 28px 24px 56px; display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
+    <div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
+      <section class="card" style="padding: 28px; display: flex; flex-direction: column; gap: 16px">
+        <h2 style="margin: 0; display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 22px"><span class="num">1</span>Deliver to</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px">
+          <sc-for list="{{addrs}}" as="a" hint-placeholder-count="2">
+            <label class="{{a.cls}}"><input type="radio" name="addr" checked="{{a.on}}" onChange="{{a.pick}}"><span style="display: flex; flex-direction: column; gap: 4px"><b style="font-size: 16px">{{a.label}}</b><span style="font-size: 14px; color: #5D6560">{{a.line}}</span><span style="font-size: 13px; color: #0E7A3C; font-weight: 600">{{a.eta}}</span></span></label>
+          </sc-for>
+        </div>
+      </section>
+
+      <section class="card" style="padding: 28px; display: flex; flex-direction: column; gap: 14px; animation-delay: .08s">
+        <h2 style="margin: 0; display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 22px"><span class="num">2</span>Pay with</h2>
+        <sc-for list="{{pays}}" as="p" hint-placeholder-count="4">
+          <label class="{{p.cls}}"><input type="radio" name="pay" checked="{{p.on}}" onChange="{{p.pick}}"><span style="display: flex; flex-direction: column; gap: 4px"><b style="font-size: 16px">{{p.label}}</b><span style="font-size: 14px; color: #5D6560">{{p.note}}</span></span></label>
+        </sc-for>
+        <sc-if value="{{newCard}}" hint-placeholder-val="{{ true }}">
+          <div style="display: flex; flex-wrap: wrap; gap: 20px; padding: 6px 0; animation: fadeUp .35s both">
+            <div class="cardviz" style="flex: 1 1 260px; max-width: 340px">
+              <div style="display: flex; justify-content: space-between; align-items: center"><span style="width: 42px; height: 30px; border-radius: 6px; background: linear-gradient(135deg,#E9C46A,#B8892B)"></span><b style="font-size: 18px; letter-spacing: .08em">{{network}}</b></div>
+              <span style="font-family: 'DejaVu Sans Mono', monospace; font-size: 20px; letter-spacing: .12em">{{cardShown}}</span>
+              <div style="display: flex; justify-content: space-between; font-size: 13px; color: #C9D1CC"><span>RAVI KUMAR</span><span>12/30</span></div>
+            </div>
+            <div style="flex: 1 1 260px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+              <label class="f" style="grid-column: span 2"><span class="lbl">Card number</span><input class="{{cardInpCls}}" inputmode="numeric" value="{{cardNo}}" onInput="{{onCard}}"></label>
+              <label class="f"><span class="lbl">Expiry</span><input class="inp" value="12/30"></label>
+              <label class="f"><span class="lbl">CVV</span><input class="inp" type="password" value="123"></label>
+              <span style="grid-column: span 2; font-size: 13px; color: #0E5E31; background: #E7F6EC; border-radius: 12px; padding: 10px 12px">Card details go straight to the payment gateway. Foodu never stores your card number or CVV. Test: 4111 1111 1111 1111 succeeds, 4000 0000 0000 0002 is declined.</span>
+            </div>
+          </div>
+        </sc-if>
+      </section>
+    </div>
+
+    <aside class="{{asideCls}}" style="flex: 1 1 320px; max-width: 400px; padding: 28px; display: flex; flex-direction: column; gap: 16px; animation-delay: .16s">
+      <h2 style="margin: 0; font-weight: 800; font-size: 22px">Bill details</h2>
+      <div style="display: flex; flex-direction: column; gap: 10px">
+        <div style="display: flex; gap: 12px; align-items: center"><span class="photo" style="width: 52px; height: 52px; border-radius: 12px"><img src="{{img.biryani}}" alt=""></span><span style="flex: 1; font-size: 15px"><b>Chicken Dum Biryani</b><br><span style="color: #5D6560; font-size: 13px">+ Extra Raita · ×1</span></span><b>₹350</b></div>
+        <div style="display: flex; gap: 12px; align-items: center"><span class="photo" style="width: 52px; height: 52px; border-radius: 12px"><img src="{{img.desserts}}" alt=""></span><span style="flex: 1; font-size: 15px"><b>Gulab Jamun (2 pcs)</b><br><span style="color: #5D6560; font-size: 13px">×1</span></span><b>₹90</b></div>
+      </div>
+      <div style="display: flex; gap: 10px">
+        <input class="{{couponCls}}" aria-label="Coupon code" value="{{code}}" onInput="{{onCode}}" style="flex: 1; font-weight: 700; letter-spacing: .06em; text-transform: uppercase" placeholder="Coupon code">
+        <button type="button" onClick="{{applyCode}}" style="min-height: 50px; padding: 0 18px; border-radius: 14px; border: 0; background: #111311; color: #fff; font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 15px">{{applyLabel}}</button>
+      </div>
+      <span style="font-size: 14px; font-weight: 600; color: {{couponMsgColor}}; min-height: 18px">{{couponMsg}}</span>
+      <div style="display: flex; flex-direction: column; gap: 10px">
+        <div class="row"><span>Item total</span><span>₹440</span></div>
+        <sc-if value="{{hasDisc}}" hint-placeholder-val="{{ true }}"><div class="row" style="color: #0E7A3C; font-weight: 700"><span>Coupon {{applied}}</span><span>−₹{{disc}}</span></div></sc-if>
+        <div class="row"><span>Delivery fee</span><span>₹30</span></div>
+        <div class="row"><span>Platform fee</span><span>₹5</span></div>
+        <div class="row"><span>Taxes (5%)</span><span>₹22</span></div>
+      </div>
+      <div class="row" style="font-weight: 800; font-size: 24px; border-top: 1px solid #E4E8E5; padding-top: 14px"><span>To pay</span><span>₹{{total}}</span></div>
+      <sc-if value="{{err}}" hint-placeholder-val="{{ false }}">
+        <div style="background: #FDECEA; color: #8E1F16; border-radius: 12px; padding: 12px 14px; font-size: 14px; font-weight: 600">Card declined. Your order is saved as “Payment failed”. Try another card or UPI.</div>
+      </sc-if>
+      <button type="button" class="btn btn-green" onClick="{{pay}}">
+        <sc-if value="{{busy}}" hint-placeholder-val="{{ false }}"><span class="spin"></span>Contacting your bank…</sc-if>
+        <sc-if value="{{idle}}" hint-placeholder-val="{{ true }}">{{payLabel}}</sc-if>
+      </button>
+    </aside>
+  </main>
+
+  <sc-if value="{{done}}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; inset: 0; background: rgba(17,19,17,.55); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 50">
+      <div role="dialog" aria-label="Order placed" style="position: relative; width: min(440px, 92vw); background: #fff; border-radius: 32px; padding: 40px 32px; text-align: center; display: flex; flex-direction: column; gap: 14px; align-items: center; overflow: hidden; animation: ring .4s cubic-bezier(.2,.8,.2,1) both">
+        <sc-for list="{{confetti}}" as="c" hint-placeholder-count="12"><span style="position: absolute; top: 0; left: {{c.x}}; width: 10px; height: 14px; border-radius: 3px; background: {{c.color}}; animation: conf 1.6s {{c.d}} ease-in both"></span></sc-for>
+        <svg width="96" height="96" viewBox="0 0 52 52" style="animation: ring .5s both"><circle cx="26" cy="26" r="24" fill="#13A04F"></circle><path d="M15 27l7 7 15-15" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="40" stroke-dashoffset="40" style="animation: draw .5s .35s forwards"></path></svg>
+        <h2 style="margin: 0; font-weight: 800; font-size: 30px">Order placed!</h2>
+        <span style="color: #5D6560; font-size: 16px">Paid ₹{{total}}. Spice Route Biryani House is confirming your order.</span>
+        <a class="btn btn-dark" href="CustomerTracking.dc.html" style="align-self: stretch">Track my order</a>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1140}}'>
+const IMG = { biryani: '/_blob/2b93675217b8cf367d18aed2a6f9a309', desserts: '/_blob/100d63858d67bb12acb52423c7f1c7aa' };
+const COUPONS = { WELCOME50: { ok: true, disc: 100, msg: '50% off, capped at ₹100' }, FLAT75: { ok: true, disc: 75, msg: 'Flat ₹75 off above ₹299' }, DIWALI20: { ok: false, msg: 'This coupon has expired' } };
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { addr: 'home', pay: 'new', code: 'FLAT75', applied: 'FLAT75', cmsg: 'Flat ₹75 off above ₹299', cok: true, card: '4111 1111 1111 1111', phase: 'idle', err: false }; }
+  renderVals() {
+    const s = this.state;
+    const disc = s.applied ? COUPONS[s.applied].disc : 0;
+    const total = 440 + 30 + 5 + 22 - disc;
+    const digits = s.card.replace(/\D/g, '');
+    const network = digits.startsWith('4') ? 'VISA' : digits.startsWith('5') ? 'MASTERCARD' : digits.startsWith('6') ? 'RUPAY' : 'CARD';
+    const shown = (digits + '••••••••••••••••').slice(0, 16).replace(/(.{4})/g, '$1 ').trim();
+    const addrs = [['home', 'Home', '221, 9th Cross, Jayanagar 3rd Block · Near Cool Joint', 'Arrives in about 27 min'], ['work', 'Work', 'Prestige Tech Park, Koramangala · Gate 2', 'Arrives in about 46 min']];
+    const pays = [['saved', 'Saved card · VISA •••• 1111', 'Expires 12/2030'], ['new', 'New debit or credit card', 'Visa, Mastercard, RuPay'], ['upi', 'UPI', 'Pay with any UPI ID'], ['cod', 'Cash on delivery', 'Pay the rider when the food arrives']];
+    return {
+      img: IMG, total, disc, applied: s.applied, hasDisc: !!s.applied, code: s.code, network, cardShown: shown, cardNo: s.card,
+      addrs: addrs.map(([id, label, line, eta]) => ({ label, line, eta, on: s.addr === id, cls: s.addr === id ? 'opt on' : 'opt', pick: () => this.setState({ addr: id }) })),
+      pays: pays.map(([id, label, note]) => ({ label, note, on: s.pay === id, cls: s.pay === id ? 'opt on' : 'opt', pick: () => this.setState({ pay: id, err: false }) })),
+      newCard: s.pay === 'new',
+      cardInpCls: s.err ? 'inp shake' : 'inp',
+      onCard: (e) => this.setState({ card: e.target.value.replace(/[^\d ]/g, '').slice(0, 19), err: false }),
+      onCode: (e) => this.setState({ code: e.target.value.toUpperCase() }),
+      applyLabel: s.applied && s.applied === s.code ? 'Remove' : 'Apply',
+      applyCode: () => {
+        if (s.applied && s.applied === s.code) return this.setState({ applied: '', cmsg: 'Coupon removed', cok: false });
+        const c = COUPONS[s.code.trim()];
+        if (!c) return this.setState({ cmsg: 'No such coupon', cok: false });
+        if (!c.ok) return this.setState({ cmsg: c.msg, cok: false });
+        this.setState({ applied: s.code.trim(), cmsg: c.msg, cok: true });
+      },
+      couponCls: s.cok ? 'inp' : 'inp',
+      couponMsg: s.cmsg, couponMsgColor: s.cok ? '#0E7A3C' : '#8E1F16',
+      asideCls: s.err ? 'card shake' : 'card', err: s.err,
+      busy: s.phase === 'busy', idle: s.phase !== 'busy',
+      payLabel: s.pay === 'cod' ? `Place order · ₹${total}` : `Pay ₹${total}`,
+      pay: () => {
+        if (s.phase === 'busy') return;
+        this.setState({ phase: 'busy', err: false });
+        setTimeout(() => {
+          const declined = s.pay === 'new' && s.card.replace(/\D/g, '') === '4000000000000002';
+          this.setState(declined ? { phase: 'idle', err: true } : { phase: 'done' });
+        }, 1600);
+      },
+      done: s.phase === 'done',
+      confetti: Array.from({ length: 14 }, (_, i) => ({ x: (6 + i * 6.6) + '%', d: (i % 5) * 0.08 + 's', color: ['#13A04F', '#FFD60A', '#D6336C', '#111311'][i % 4] }))
+    };
+  }
+}
+</script>
+</body>
+</html>

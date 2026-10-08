@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Kitchen Portal: payouts</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body{margin:0;font-family:'Outfit',sans-serif;color:#111311;background:#F4F7F5}
+a{color:#0E7A3C}a:hover{color:#095A2C}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes grow{from{width:0}}
+.side a{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;color:#C9D1CC;text-decoration:none;font-weight:600;font-size:16px;transition:background .2s,color .2s}
+.side a:hover{color:#fff;background:#1E221F}.side a.on{background:#13A04F;color:#fff}
+.card{background:#fff;border-radius:22px;box-shadow:0 1px 2px rgba(17,19,17,.06),0 8px 22px rgba(17,19,17,.06);animation:fadeUp .45s both}
+.row{display:grid;grid-template-columns:110px 110px 1fr 1fr 1fr 110px;gap:12px;align-items:center;padding:14px 18px;border-bottom:1px solid #EEF1EF;animation:fadeUp .35s both;transition:background .2s}
+.row:hover{background:#FAFCFB}
+.head{display:grid;grid-template-columns:110px 110px 1fr 1fr 1fr 110px;gap:12px;padding:12px 18px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#5D6560;font-weight:700;border-bottom:1px solid #E4E8E5}
+.badge{display:inline-flex;padding:4px 10px;border-radius:999px;font-weight:700;font-size:12px;letter-spacing:.06em;justify-self:start}
+.tab{min-height:42px;padding:0 16px;border-radius:999px;border:1.5px solid #D6DCD8;background:#fff;font-family:'Outfit',sans-serif;font-weight:700;font-size:14px;color:#111311;transition:all .2s}
+.tab.on{background:#111311;color:#fff;border-color:#111311}
+.split{display:flex;height:12px;border-radius:999px;overflow:hidden;background:#EEF1EF}
+.split i{display:block;height:100%;animation:grow .9s cubic-bezier(.2,.8,.2,1) both}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div style="min-height: 900px; display: flex; flex-wrap: wrap">
+  <aside class="side" style="flex: 1 1 240px; max-width: 260px; background: #111311; padding: 24px 16px; display: flex; flex-direction: column; gap: 6px; box-sizing: border-box">
+    <div style="display: flex; align-items: center; gap: 10px; padding: 4px 8px 20px">
+      <span style="width: 40px; height: 40px; border-radius: 50%; background: #13A04F; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11h16a8 8 0 0 1-16 0z"></path><path d="M9 7c0-2 1-3 3-3"></path><path d="M14 8c1-2 3-2 4-1"></path></svg></span>
+      <span style="display: flex; flex-direction: column; color: #fff"><b style="font-size: 22px">Foodu</b><span style="font-size: 12px; letter-spacing: .12em; color: #9FE0B8">KITCHEN PORTAL</span></span>
+    </div>
+    <a href="KitchenOrders.dc.html">Live orders</a>
+    <a href="KitchenMenu.dc.html">Menu &amp; stock</a>
+    <a class="on" href="KitchenPayouts.dc.html">Payouts</a>
+    <a href="KitchenOnboarding.dc.html">Restaurant profile</a>
+  </aside>
+  <main style="flex: 999 1 640px; min-width: 0; padding: 28px; display: flex; flex-direction: column; gap: 20px; box-sizing: border-box">
+    <div>
+      <h1 style="margin: 0; font-weight: 800; font-size: 32px">Payouts</h1>
+      <span style="color: #5D6560; font-size: 15px">Every delivered order adds a payout: order amount minus the platform commission.</span>
+    </div>
+    <section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px">
+      <div class="card" style="padding: 22px; background: #111311; color: #fff"><span style="font-size: 13px; letter-spacing: .1em; color: #9FE0B8">PENDING PAYOUT</span><div style="font-weight: 800; font-size: 34px; margin-top: 6px">₹{{pend}}</div><span style="font-size: 14px; color: #C9D1CC">2 orders</span></div>
+      <div class="card" style="padding: 22px; animation-delay: .06s"><span style="font-size: 13px; letter-spacing: .1em; color: #5D6560">PAID OUT</span><div style="font-weight: 800; font-size: 34px; margin-top: 6px">₹{{paid}}</div><span style="font-size: 14px; color: #5D6560">1 order</span></div>
+      <div class="card" style="padding: 22px; animation-delay: .12s; display: flex; flex-direction: column; gap: 8px"><span style="font-size: 13px; letter-spacing: .1em; color: #5D6560">WHERE EACH ₹100 GOES</span>
+        <div class="split"><i style="width: 82%; background: #13A04F"></i><i style="width: 18%; background: #111311"></i></div>
+        <span style="font-size: 14px; color: #5D6560">₹82 to you · ₹18 commission (18%)</span></div>
+    </section>
+    <div style="display: flex; gap: 10px"><sc-for list="{{tabs}}" as="t" hint-placeholder-count="3"><button type="button" class="{{t.cls}}" onClick="{{t.pick}}">{{t.label}}</button></sc-for></div>
+    <div class="card" style="overflow-x: auto; animation-delay: .18s">
+      <div style="min-width: 760px">
+        <div class="head"><span>Order</span><span>Delivered</span><span>Order amount</span><span>Commission</span><span>You receive</span><span>Status</span></div>
+        <sc-for list="{{rows}}" as="r" hint-placeholder-count="3">
+          <div class="row" style="animation-delay: {{r.delay}}"><b>#{{r.id}}</b><span>{{r.when}}</span><span>₹{{r.amt}}</span><span>₹{{r.com}}</span><b>₹{{r.net}}</b><span class="badge" style="background: {{r.bg}}; color: {{r.fg}}">{{r.status}}</span></div>
+        </sc-for>
+      </div>
+    </div>
+    <p style="margin: 0; font-size: 13px; color: #5D6560">Example figures for layout. Order amount is the food total before delivery fee, platform fee and taxes.</p>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+const ROWS = [{ id: 9004, when: 'Today', amt: 740, paid: false }, { id: 9002, when: 'Today', amt: 500, paid: false }, { id: 9001, when: 'Yesterday', amt: 440, paid: true }];
+const money = (n) => n.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { tab: 'All', k: 0 }; }
+  componentDidMount() { this.t = setInterval(() => { if (this.state.k < 1) this.setState({ k: Math.min(1, this.state.k + 0.05) }); }, 30); }
+  componentWillUnmount() { clearInterval(this.t); }
+  renderVals() {
+    const s = this.state, e = 1 - Math.pow(1 - s.k, 3);
+    const net = (r) => r.amt * 0.82;
+    const list = ROWS.filter((r) => s.tab === 'All' || (s.tab === 'Paid') === r.paid);
+    return {
+      pend: money(ROWS.filter((r) => !r.paid).reduce((a, r) => a + net(r), 0) * e), paid: money(ROWS.filter((r) => r.paid).reduce((a, r) => a + net(r), 0) * e),
+      tabs: ['All', 'Pending', 'Paid'].map((t) => ({ label: t, cls: s.tab === t ? 'tab on' : 'tab', pick: () => this.setState({ tab: t }) })),
+      rows: list.map((r, i) => ({ id: r.id, when: r.when, amt: money(r.amt), com: money(r.amt * 0.18), net: money(net(r)), delay: i * 0.06 + 's',
+        status: r.paid ? 'PAID' : 'PENDING', bg: r.paid ? '#E7F6EC' : '#FFF4D6', fg: r.paid ? '#0E7A3C' : '#7A4B00' }))
+    };
+  }
+}
+</script>
+</body>
+</html>

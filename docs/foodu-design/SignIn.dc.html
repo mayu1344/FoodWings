@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Sign in with phone and OTP</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body{margin:0;font-family:'Outfit',sans-serif;color:#111311;background:#F4F7F5}
+a{color:#0E7A3C}a:hover{color:#095A2C}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes kenburns{from{transform:scale(1.05)}to{transform:scale(1.18) translate(-2%,-2%)}}
+@keyframes blink{50%{opacity:0}}
+@keyframes shake{20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:54px;padding:0 24px;border-radius:999px;font-family:'Outfit',sans-serif;font-weight:700;font-size:17px;border:0;text-decoration:none;box-sizing:border-box;transition:transform .15s,background .2s,opacity .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn[disabled]{opacity:.45;transform:none}
+.btn-dark{background:#111311;color:#fff}.btn-dark:hover{color:#fff;background:#000}
+.btn-green{background:#0E8A42;color:#fff}.btn-green:hover{color:#fff;background:#0B7337}
+.inp{min-height:56px;border:1.5px solid #D6DCD8;border-radius:14px;padding:0 16px;font-family:'Outfit',sans-serif;font-size:18px;font-weight:600;color:#111311;background:#fff;box-sizing:border-box;transition:border .2s,box-shadow .2s}
+.inp:focus{outline:none;border-color:#13A04F;box-shadow:0 0 0 4px rgba(19,160,79,.15)}
+.lbl{font-weight:600;font-size:15px}
+.seg{flex:1;min-height:64px;border-radius:16px;border:1.5px solid #D6DCD8;background:#fff;font-family:'Outfit',sans-serif;font-weight:700;font-size:16px;color:#111311;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;transition:all .2s}
+.seg:hover{border-color:#111311;transform:translateY(-2px)}
+.seg.on{border-color:#0E8A42;background:#E7F6EC;color:#0E7A3C;box-shadow:0 8px 18px rgba(19,160,79,.15)}
+.box{width:54px;height:62px;border-radius:14px;border:1.5px solid #D6DCD8;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;background:#fff;transition:border .2s,transform .2s}
+.box.f{border-color:#13A04F;background:#F3FBF6;transform:translateY(-2px)}
+.box.cur{border-color:#111311}
+.box.cur::after{content:"";width:2px;height:26px;background:#111311;animation:blink 1s infinite}
+.shake{animation:shake .4s}
+.panel{animation:fadeUp .45s both}
+.spin{width:20px;height:20px;border-radius:50%;border:3px solid rgba(255,255,255,.35);border-top-color:#fff;animation:spin .8s linear infinite}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div style="min-height: 900px; display: flex; flex-wrap: wrap">
+  <aside style="flex: 1 1 420px; color: #fff; padding: 56px; display: flex; flex-direction: column; gap: 28px; box-sizing: border-box; position: relative; overflow: hidden; background: #0F8E45">
+    <img src="{{heroImg}}" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; animation: kenburns 18s ease-in-out infinite alternate; filter: saturate(1.1)">
+    <div style="position: absolute; inset: 0; background: linear-gradient(160deg, rgba(19,160,79,.92) 0%, rgba(15,142,69,.75) 45%, rgba(17,19,17,.55) 100%)"></div>
+    <a href="Main.dc.html" style="position: relative; display: flex; align-items: center; gap: 12px; color: #fff; text-decoration: none">
+      <span style="width: 48px; height: 48px; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#13A04F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11h16a8 8 0 0 1-16 0z"></path><path d="M9 7c0-2 1-3 3-3"></path><path d="M14 8c1-2 3-2 4-1"></path></svg></span>
+      <span style="font-weight: 800; font-size: 30px">Foodu</span>
+    </a>
+    <h1 style="position: relative; margin: 0; font-weight: 800; font-size: 56px; line-height: 1.04; letter-spacing: -0.02em; animation: fadeUp .7s both">{{heroTitle}}</h1>
+    <p style="position: relative; margin: 0; font-size: 19px; line-height: 1.5; max-width: 420px; animation: fadeUp .7s .1s both">{{heroText}}</p>
+    <div style="position: relative; display: flex; flex-direction: column; gap: 12px; margin-top: auto">
+      <div style="background: rgba(255,255,255,.16); backdrop-filter: blur(8px); border-radius: 18px; padding: 16px 20px; font-size: 16px">No password to remember. The code is valid for 5 minutes.</div>
+      <div style="background: rgba(255,255,255,.16); backdrop-filter: blur(8px); border-radius: 18px; padding: 16px 20px; font-size: 16px">Restaurants and riders can start once our team approves them.</div>
+    </div>
+  </aside>
+
+  <main style="flex: 999 1 560px; min-width: 0; display: flex; align-items: center; justify-content: center; padding: 48px 24px">
+    <form class="{{formCls}}" style="width: 100%; max-width: 520px; background: #fff; border-radius: 28px; padding: 40px; box-shadow: 0 16px 40px rgba(17,19,17,.1); display: flex; flex-direction: column; gap: 22px; box-sizing: border-box">
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <h2 style="margin: 0; font-weight: 800; font-size: 34px">Sign in</h2>
+        <p style="margin: 0; color: #5D6560; font-size: 16px">New here? <a href="Register.dc.html">Create an account</a></p>
+      </div>
+      <fieldset style="border: 0; padding: 0; margin: 0">
+        <legend class="lbl" style="padding: 0; margin-bottom: 10px">Which app are you using?</legend>
+        <div style="display: flex; gap: 10px">
+          <sc-for list="{{apps}}" as="a" hint-placeholder-count="3">
+            <button type="button" class="{{a.cls}}" aria-pressed="{{a.on}}" onClick="{{a.pick}}">{{a.name}}<span style="font-size: 12px; font-weight: 500">{{a.sub}}</span></button>
+          </sc-for>
+        </div>
+      </fieldset>
+
+      <sc-if value="{{stepPhone}}" hint-placeholder-val="{{ true }}">
+        <div class="panel" style="display: flex; flex-direction: column; gap: 14px">
+          <label style="display: flex; flex-direction: column; gap: 8px">
+            <span class="lbl">Mobile number</span>
+            <span style="display: flex; gap: 10px">
+              <span class="inp" style="display: flex; align-items: center; width: 84px; justify-content: center; color: #5D6560">+91</span>
+              <input class="inp" type="tel" inputmode="numeric" placeholder="10-digit number" value="{{phone}}" onInput="{{onPhone}}" style="flex: 1; letter-spacing: .06em">
+            </span>
+          </label>
+          <button type="button" class="btn btn-dark" disabled="{{phoneBad}}" onClick="{{sendOtp}}">
+            <sc-if value="{{sending}}" hint-placeholder-val="{{ false }}"><span class="spin"></span></sc-if>Send OTP
+          </button>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{stepOtp}}" hint-placeholder-val="{{ false }}">
+        <div class="panel" style="display: flex; flex-direction: column; gap: 12px">
+          <span class="lbl">Enter the 6-digit code sent to +91 {{phone}}</span>
+          <label style="position: relative; display: flex; gap: 10px; justify-content: space-between">
+            <sc-for list="{{boxes}}" as="b" hint-placeholder-count="6"><span class="{{b.cls}}">{{b.d}}</span></sc-for>
+            <input aria-label="One-time code" inputmode="numeric" autocomplete="one-time-code" value="{{otp}}" onInput="{{onOtp}}" style="position: absolute; inset: 0; opacity: 0; font-size: 24px">
+          </label>
+          <div style="display: flex; justify-content: space-between; font-size: 14px; color: #5D6560">
+            <span>{{resendText}}</span>
+            <button type="button" onClick="{{changeNo}}" style="border: 0; background: none; color: #0E7A3C; font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 14px; padding: 0">Change number</button>
+          </div>
+          <div style="background: #FFF6E5; color: #8A4B00; border-radius: 12px; padding: 10px 14px; font-size: 14px">Test mode: your code is <b>482917</b></div>
+          <sc-if value="{{wrong}}" hint-placeholder-val="{{ false }}"><div style="background: #FDECEA; color: #8E1F16; border-radius: 12px; padding: 10px 14px; font-size: 14px; font-weight: 600">Wrong OTP. {{triesLeft}} tries left.</div></sc-if>
+          <button type="button" class="btn btn-green" disabled="{{otpShort}}" onClick="{{verify}}">Verify &amp; continue</button>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{stepDone}}" hint-placeholder-val="{{ false }}">
+        <div class="panel" style="display: flex; flex-direction: column; gap: 14px; align-items: center; text-align: center">
+          <svg width="72" height="72" viewBox="0 0 52 52"><circle cx="26" cy="26" r="24" fill="#13A04F"></circle><path d="M15 27l7 7 15-15" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          <b style="font-size: 22px">Welcome back, {{who}}!</b>
+          <a class="btn btn-dark" href="{{destHref}}" style="align-self: stretch">Open {{destName}}</a>
+        </div>
+      </sc-if>
+    </form>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+const IMG = { customer: '/_blob/4d392589680f9a9f0f12a37a20b10d43', restaurant: '/_blob/916f486b3a2112fefec2e2d0d134500d', rider: '/_blob/d7edc21fb631b8e2ebcc7d360ddee88a' };
+const APPS = [
+  { id: 'customer', name: 'Customer', sub: 'Order food', title: 'Hungry? Sign in.', text: 'Order from the best restaurants near you, pay safely and track every order live.', href: 'CustomerHome.dc.html', dest: 'the Customer app', who: 'Ravi', phone: '98450 11111' },
+  { id: 'restaurant', name: 'Restaurant', sub: 'Kitchen Portal', title: 'Your kitchen, live.', text: 'Accept orders, mark food ready and see your payouts in one place.', href: 'KitchenOrders.dc.html', dest: 'Kitchen Portal', who: 'Manjunath', phone: '98450 22221' },
+  { id: 'rider', name: 'Rider', sub: 'Rider HUD', title: 'Ride. Deliver. Earn.', text: 'Go online, take nearby orders and follow the map to every door.', href: 'RiderHome.dc.html', dest: 'Rider HUD', who: 'Suresh', phone: '98450 33331' }
+];
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { app: 'customer', phone: '98450 11111', step: 'phone', otp: '', sending: false, left: 0, tries: 5, wrong: false, shake: 0 }; }
+  componentDidMount() { this.t = setInterval(() => { if (this.state.left > 0) this.setState({ left: this.state.left - 1 }); }, 1000); }
+  componentWillUnmount() { clearInterval(this.t); }
+  renderVals() {
+    const s = this.state; const app = APPS.find((a) => a.id === s.app);
+    const digits = s.phone.replace(/\D/g, '');
+    return {
+      heroImg: IMG[s.app], heroTitle: app.title, heroText: app.text, destHref: app.href, destName: app.dest, who: app.who,
+      formCls: s.wrong ? 'shake' : '',
+      apps: APPS.map((a) => ({ ...a, on: s.app === a.id ? 'true' : 'false', cls: s.app === a.id ? 'seg on' : 'seg', pick: () => this.setState({ app: a.id, phone: a.phone, step: 'phone', otp: '', wrong: false }) })),
+      stepPhone: s.step === 'phone', stepOtp: s.step === 'otp', stepDone: s.step === 'done',
+      phone: s.phone, phoneBad: digits.length !== 10, sending: s.sending,
+      onPhone: (e) => this.setState({ phone: e.target.value.replace(/[^\d ]/g, '').slice(0, 11) }),
+      sendOtp: () => { this.setState({ sending: true }); setTimeout(() => this.setState({ sending: false, step: 'otp', left: 30, otp: '' }), 900); },
+      otp: s.otp, otpShort: s.otp.length !== 6,
+      boxes: Array.from({ length: 6 }, (_, i) => ({ d: s.otp[i] || '', cls: s.otp[i] ? 'box f' : i === s.otp.length ? 'box cur' : 'box' })),
+      onOtp: (e) => this.setState({ otp: e.target.value.replace(/\D/g, '').slice(0, 6), wrong: false }),
+      resendText: s.left > 0 ? `Resend code in 0:${String(s.left).padStart(2, '0')}` : 'Didn’t get it? Resend code',
+      changeNo: () => this.setState({ step: 'phone', otp: '' }),
+      wrong: s.wrong, triesLeft: s.tries,
+      verify: () => { if (s.otp === '482917') this.setState({ step: 'done', wrong: false }); else this.setState({ wrong: true, tries: Math.max(0, s.tries - 1), otp: '' }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

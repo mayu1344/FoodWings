@@ -127,3 +127,34 @@ In dev mode (`OTP_DEV_MODE=true`), the OTP is returned directly in the response 
 | **Restaurant Owner** (Udupi Grand) | Lakshmi Iyer | `9845022222` |
 | **Delivery Partner** | Suresh B | `9845033331` |
 | **Ops Admin** | Admin | `9845044441` |
+
+---
+
+## 🎨 New Foodu front end (October 2026)
+
+The front end in `frontend/` was rebuilt from the Foodu design (`docs/foodu-design/`). It talks to the real API only (no mock mode).
+The old front end is kept in `frontend_legacy/` in case you need it.
+
+Start the API as usual, then open **http://localhost:8000/app/**
+
+| Page | URL | Test login (OTP is shown on screen in dev mode) |
+|------|-----|------------------------------------------------|
+| Landing | `/app/` | – |
+| Customer | `/app/customer.html` | 9845011111 (Ravi) |
+| Kitchen Portal | `/app/restaurant.html` | 9845022221 (Manjunath, Spice Route) |
+| Rider HUD | `/app/rider.html` | 9845033331 (Suresh) |
+| Admin | `/app/admin.html` | 9845044441 |
+| Sign in / register | `/app/login.html?app=customer` (or restaurant / rider / admin) | any new 10-digit number to register |
+
+Test cards (mock gateway): `4111 1111 1111 1111` works, `4000 0000 0000 0002` is declined. Any future expiry, any CVV.
+The card number and CVV are sent only to `/mock-gateway/v1/tokenize`; our API receives only the token.
+
+Full order test: customer orders and pays → Kitchen Portal "Accept order" → Rider goes online and accepts → Kitchen "Mark ready" → Rider slides to confirm pickup → "Mark as delivered" → customer sees Delivered and rates.
+
+### Backend changes made with the new UI (`api/app/main.py`)
+- `/auth/login` for the restaurant app crashed (it sorted by a column `restaurant_staff.assigned_at` that does not exist). Fixed.
+- `/restaurant/{id}/payouts` used columns that do not exist. It now returns `payout_id, order_id, order_amount, commission, payout_amount, payout_status, created_at`.
+- `/restaurant/{id}/orders` also returns `item_total`, `partner_id` and `partner_name`.
+- A rider who comes online later now gets offered waiting orders (`offer_waiting_orders`, used by `/partner/status` and `/partner/offers`).
+- New admin endpoints: `GET /admin/pending`, `POST /admin/restaurants/{id}/reject`, `POST /admin/partners/{id}/reject`.
+- A declined payment (402) now includes a readable `message`.

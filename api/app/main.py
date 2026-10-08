@@ -178,6 +178,28 @@ def _can_view_order(conn, user: CurrentUser, order: dict) -> bool:
                         (order["restaurant_id"], user.user_id)).fetchone() is not None
 
 
+def offer_waiting_orders(conn, partner_id: int) -> None:
+    """When a free, verified rider comes online (or checks offers), offer them the nearest
+    accepted/ready order in their city that has no rider and no open offer yet."""
+    p = conn.execute("SELECT * FROM delivery_partners WHERE partner_id = %s", (partner_id,)).fetchone()
+    if not p or not p["is_online"] or p["kyc_status"] != "VERIFIED" or p["current_order_id"]:
+        return
+    if conn.execute("SELECT 1 FROM delivery_assignments WHERE partner_id = %s AND status = 'OFFERED'", (partner_id,)).fetchone():
+        return
+    waiting = conn.execute(
+        """SELECT o.order_id FROM orders o JOIN restaurants r USING (restaurant_id)
+           WHERE o.status IN ('ACCEPTED', 'PREPARING', 'READY') AND o.partner_id IS NULL AND r.city = %s
+             AND o.customer_id <> %s
+             AND NOT EXISTS (SELECT 1 FROM delivery_assignments da WHERE da.order_id = o.order_id
+                             AND (da.status = 'OFFERED' OR da.partner_id = %s))
+           ORDER BY o.placed_at LIMIT 1""",
+        (p["city"], partner_id, partner_id),
+    ).fetchone()
+    if waiting:
+        conn.execute("INSERT INTO delivery_assignments (order_id, partner_id) VALUES (%s, %s)",
+                     (waiting["order_id"], partner_id))
+
+
 # ==============================================================================
 # 3. AUTHENTICATION ENDPOINTS (/auth/*)
 # ==============================================================================
@@ -325,7 +347,7 @@ def login(body: LoginIn, conn=Depends(get_conn)):
                FROM restaurant_staff rs
                JOIN restaurants r USING (restaurant_id)
                WHERE rs.user_id = %s
-               ORDER BY rs.assigned_at DESC LIMIT 1""",
+               ORDER BY rs.restaurant_id DESC LIMIT 1""",
             (user_id,),
         ).fetchone()
         if not staff:
@@ -905,6 +927,7 @@ def pay(payment_id: int, body: PayIn, user: CurrentUser = Depends(Customer), con
 
     if not ok:
         raise HTTPException(402, {"payment_id": payment_id, "status": "FAILED", "reason": resp.get("error_description"),
+                                  "message": "Payment failed: " + (resp.get("error_description") or "card declined"),
                                   "hint": "You can retry with another card/UPI on the same payment_id"})
     return {"payment_id": payment_id, "status": "CAPTURED", "order_id": pay_row["order_id"],
             "receipt": f"{card_network} **** {card_last4}" if card_last4 else pay_row["method_type"]}
@@ -986,7 +1009,8 @@ def live_orders(restaurant_id: int, status: str = "PLACED", user: CurrentUser = 
     """View active orders for the restaurant filtered by status."""
     assert_staff(conn, restaurant_id, user.user_id)
     orders = conn.execute(
-        """SELECT o.order_id, o.status, o.total_amount, o.payment_mode, o.special_instructions, o.placed_at,
+        """SELECT o.order_id, o.status, o.total_amount, o.item_total, o.payment_mode, o.special_instructions, o.placed_at,
+                  o.partner_id, (SELECT u.name FROM users u WHERE u.user_id = o.partner_id) AS partner_name,
                   json_agg(json_build_object('item', oi.item_name, 'qty', oi.quantity, 'addons', oi.addons)) AS items
            FROM orders o JOIN order_items oi USING (order_id)
            WHERE o.restaurant_id = %s AND o.status = %s
@@ -1050,9 +1074,8 @@ def restaurant_payouts(restaurant_id: int, user: CurrentUser = Depends(Staff), c
     """View payout ledger and settlements for the restaurant."""
     assert_staff(conn, restaurant_id, user.user_id)
     return conn.execute(
-        """SELECT payout_id, period_start, period_end, order_count, gross_sales, commission_amount,
-                  net_payout, status, paid_at
-           FROM restaurant_payouts WHERE restaurant_id = %s ORDER BY period_end DESC""",
+        """SELECT payout_id, order_id, order_amount, commission, payout_amount, payout_status, created_at
+           FROM restaurant_payouts WHERE restaurant_id = %s ORDER BY created_at DESC""",
         (restaurant_id,),
     ).fetchall()
 
@@ -1122,6 +1145,8 @@ def set_online_status(body: OnlineIn, user: CurrentUser = Depends(Partner), conn
     with transaction(conn):
         conn.execute("UPDATE delivery_partners SET is_online = %s WHERE partner_id = %s",
                      (body.is_online, user.user_id))
+        if body.is_online:
+            offer_waiting_orders(conn, user.user_id)
     return {"partner_id": user.user_id, "is_online": body.is_online}
 
 
@@ -1141,6 +1166,8 @@ def update_location(body: LocationIn, user: CurrentUser = Depends(Partner), conn
 @app.get("/partner/offers", tags=["6. Delivery Partner"])
 def list_offers(user: CurrentUser = Depends(Partner), conn=Depends(get_conn)):
     """List pending delivery assignments offered to this rider."""
+    with transaction(conn):
+        offer_waiting_orders(conn, user.user_id)
     return conn.execute(
         """SELECT da.assignment_id, da.order_id, da.offered_at, o.total_amount, o.payment_mode,
                   r.name AS restaurant_name, r.address_line AS pickup_address,
@@ -1265,6 +1292,49 @@ def verify_partner(partner_id: int, user: CurrentUser = Depends(Admin), conn=Dep
             raise HTTPException(404, "Partner not found")
         conn.execute("UPDATE partner_documents SET verified = TRUE, verified_at = now() WHERE partner_id = %s",
                      (partner_id,))
+    return row
+
+
+@app.get("/admin/pending", tags=["7. Admin"])
+def admin_pending(user: CurrentUser = Depends(Admin), conn=Depends(get_conn)):
+    """Restaurants waiting for approval and riders waiting for KYC verification."""
+    restaurants = conn.execute(
+        """SELECT r.restaurant_id, r.name, r.cuisines, r.address_line, r.city, r.fssai_no, r.gst_no, r.created_at,
+                  u.name AS owner_name, u.phone AS owner_phone
+           FROM restaurants r
+           LEFT JOIN restaurant_staff rs ON rs.restaurant_id = r.restaurant_id AND rs.staff_role = 'OWNER'
+           LEFT JOIN users u ON u.user_id = rs.user_id
+           WHERE r.status = 'PENDING' ORDER BY r.created_at""").fetchall()
+    partners = conn.execute(
+        """SELECT dp.partner_id, u.name, u.phone, dp.vehicle_type, dp.vehicle_no, dp.licence_no, dp.city, dp.joined_at,
+                  COALESCE((SELECT json_agg(json_build_object('doc_type', d.doc_type, 'verified', d.verified))
+                            FROM partner_documents d WHERE d.partner_id = dp.partner_id), '[]') AS documents
+           FROM delivery_partners dp JOIN users u ON u.user_id = dp.partner_id
+           WHERE dp.kyc_status = 'PENDING_KYC' ORDER BY dp.joined_at""").fetchall()
+    for x in restaurants:
+        x["owner_phone"] = ("••••••" + x["owner_phone"][-4:]) if x.get("owner_phone") else None
+    for x in partners:
+        x["phone"] = "••••••" + x["phone"][-4:]
+    return {"restaurants": restaurants, "partners": partners}
+
+
+@app.post("/admin/restaurants/{restaurant_id}/reject", tags=["7. Admin"])
+def reject_restaurant(restaurant_id: int, user: CurrentUser = Depends(Admin), conn=Depends(get_conn)):
+    """Reject a pending restaurant (it becomes SUSPENDED)."""
+    row = conn.execute("UPDATE restaurants SET status = 'SUSPENDED' WHERE restaurant_id = %s AND status = 'PENDING' "
+                       "RETURNING restaurant_id, name, status", (restaurant_id,)).fetchone()
+    if not row:
+        raise HTTPException(409, "Restaurant not found or not pending")
+    return row
+
+
+@app.post("/admin/partners/{partner_id}/reject", tags=["7. Admin"])
+def reject_partner(partner_id: int, user: CurrentUser = Depends(Admin), conn=Depends(get_conn)):
+    """Reject a rider's KYC."""
+    row = conn.execute("UPDATE delivery_partners SET kyc_status = 'REJECTED' WHERE partner_id = %s AND kyc_status = 'PENDING_KYC' "
+                       "RETURNING partner_id, kyc_status", (partner_id,)).fetchone()
+    if not row:
+        raise HTTPException(409, "Rider not found or not pending")
     return row
 
 

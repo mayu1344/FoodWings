@@ -1,0 +1,141 @@
+/* =====================================================================
+   foodu.css - one stylesheet for every Foodu page
+   Theme from the Foodu design canvas: green / white / black, font Outfit.
+   ===================================================================== */
+:root{
+  --green:#13A04F; --green-strong:#0E8A42; --green-dark:#0F8E45; --green-text:#0E7A3C; --green-tint:#E7F6EC; --green-soft:#9FE0B8;
+  --ink:#111311; --ink-2:#1E221F; --muted:#5D6560; --line:#D6DCD8; --divider:#E4E8E5; --page:#F4F7F5; --card:#fff;
+  --warn-bg:#FFF4D6; --warn:#7A4B00; --amber:#E09F00; --err-bg:#FDECEA; --err:#8E1F16; --red:#D62839;
+  --veg:#138A44; --nonveg:#A8261B; --route:#FFD60A; --map:#E9EFEB;
+  --shadow:0 1px 2px rgba(17,19,17,.06),0 10px 28px rgba(17,19,17,.07);
+  --shadow-up:0 2px 4px rgba(17,19,17,.08),0 22px 46px rgba(17,19,17,.15);
+  --r:24px;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:'Outfit',system-ui,sans-serif;color:var(--ink);background:var(--page);-webkit-font-smoothing:antialiased}
+a{color:var(--green-text)} a:hover{color:#095A2C}
+img{display:block;max-width:100%}
+button{font-family:inherit;cursor:pointer}
+button[disabled]{cursor:not-allowed}
+h1,h2,h3{margin:0;letter-spacing:-.02em}
+.wrap{max-width:1280px;margin:0 auto;padding:0 24px}
+.muted{color:var(--muted)} .small{font-size:13px} .bold{font-weight:700} .xbold{font-weight:800}
+.row{display:flex;align-items:center;gap:12px} .col{display:flex;flex-direction:column;gap:12px}
+.between{justify-content:space-between} .wrapf{flex-wrap:wrap} .grow{flex:1;min-width:0}
+.hide{display:none!important}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* ---------- buttons, chips, inputs ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 20px;border-radius:999px;font-weight:700;font-size:15px;border:0;text-decoration:none;transition:transform .15s,background .2s,opacity .2s,box-shadow .2s;white-space:nowrap}
+.btn:hover{transform:translateY(-2px)} .btn:active{transform:scale(.97)}
+.btn[disabled]{opacity:.45;transform:none}
+.btn.lg{min-height:54px;font-size:17px;padding:0 26px}
+.btn.sm{min-height:38px;font-size:14px;padding:0 14px}
+.btn.block{width:100%}
+.btn-dark{background:var(--ink);color:#fff}.btn-dark:hover{color:#fff;background:#000}
+.btn-green{background:var(--green-strong);color:#fff}.btn-green:hover{color:#fff;background:#0B7337}
+.btn-ghost{background:#fff;color:var(--ink);border:1.5px solid var(--line)}.btn-ghost:hover{color:var(--ink);border-color:var(--ink)}
+.btn-red{background:#fff;color:var(--nonveg);border:1.5px solid #E8B4AE}
+.btn-outline-w{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.9)}.btn-outline-w:hover{color:#fff;background:rgba(255,255,255,.14)}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:999px;background:var(--green-tint);color:var(--green-text);font-weight:700;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+.pill{min-height:42px;padding:0 16px;border-radius:999px;border:1.5px solid var(--line);background:#fff;font-weight:600;font-size:14px;color:var(--ink);transition:all .2s}
+.pill:hover{border-color:var(--ink)}
+.pill.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.pill.g.on{background:var(--green-tint);border-color:var(--green-strong);color:var(--green-text)}
+.badge{display:inline-flex;align-items:center;padding:4px 10px;border-radius:999px;font-weight:700;font-size:12px;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
+.b-green{background:var(--green-tint);color:var(--green-text)} .b-warn{background:var(--warn-bg);color:var(--warn)} .b-err{background:var(--err-bg);color:var(--err)} .b-ink{background:var(--ink);color:#fff} .b-gray{background:#EEF1EF;color:var(--muted)}
+.field{display:flex;flex-direction:column;gap:6px}
+.field>span{font-weight:600;font-size:14px}
+.inp{min-height:50px;width:100%;border:1.5px solid var(--line);border-radius:14px;padding:0 14px;font-family:inherit;font-size:16px;font-weight:500;color:var(--ink);background:#fff;transition:border .2s,box-shadow .2s}
+textarea.inp{padding:12px 14px;min-height:90px;resize:vertical}
+.inp:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 4px rgba(19,160,79,.15)}
+.inp.bad{border-color:#C0392B}
+.note{border-radius:12px;padding:10px 14px;font-size:14px}
+.note.ok{background:var(--green-tint);color:#0E5E31}.note.warn{background:var(--warn-bg);color:var(--warn)}.note.err{background:var(--err-bg);color:var(--err);font-weight:600}
+.sw{width:52px;height:30px;border-radius:999px;border:0;position:relative;background:#C9D1CC;transition:background .25s;flex:none}
+.sw::after{content:"";position:absolute;left:3px;top:3px;width:24px;height:24px;border-radius:50%;background:#fff;transition:left .25s;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+.sw.on{background:var(--green)}.sw.on::after{left:25px}
+
+/* ---------- cards & photos ---------- */
+.card{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow)}
+.lift{transition:transform .3s,box-shadow .3s}.lift:hover{transform:translateY(-5px);box-shadow:var(--shadow-up)}
+.photo{position:relative;overflow:hidden;background:linear-gradient(135deg,#BFE6CD,#7FCB9C)}
+.photo img{width:100%;height:100%;object-fit:cover;transition:transform .7s cubic-bezier(.2,.8,.2,1),filter .4s}
+.lift:hover .photo img,.zoom:hover img{transform:scale(1.08);filter:saturate(1.25) contrast(1.04)}
+.gray img{filter:grayscale(1) opacity(.75)!important}
+.thumb{width:48px;height:48px;border-radius:12px;flex:none}
+.veg{width:14px;height:14px;border:1.5px solid var(--veg);border-radius:3px;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.veg::after{content:"";width:6px;height:6px;border-radius:50%;background:var(--veg)}
+.veg.nv{border-color:var(--nonveg)}.veg.nv::after{background:var(--nonveg)}
+.rating{white-space:nowrap;flex:none;display:inline-flex;align-items:center;gap:4px;background:var(--green);color:#fff;font-weight:700;font-size:14px;padding:4px 10px;border-radius:10px}
+.empty{padding:40px 20px;text-align:center;color:var(--muted)}
+.skeleton{border-radius:16px;background:linear-gradient(90deg,#E9EEEB 0%,#F6F8F7 50%,#E9EEEB 100%);background-size:200% 100%;animation:shimmer 1.3s linear infinite}
+
+/* ---------- top bars ---------- */
+.topbar{background:var(--green);color:#fff;padding:14px 0;position:sticky;top:0;z-index:20;box-shadow:0 6px 20px rgba(0,0,0,.08)}
+@media (max-width:640px){.topbar{position:static}}
+.topbar a.lnk{color:#fff;text-decoration:none;font-weight:600}.topbar a.lnk:hover{color:#fff;text-decoration:underline}
+.brand{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-weight:800;font-size:26px}
+.brand:hover{color:#fff}
+.logo{width:44px;height:44px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;flex:none}
+.avatar{width:42px;height:42px;border-radius:50%;background:#FFD7A8;color:#6B3A00;font-weight:800;display:flex;align-items:center;justify-content:center;flex:none}
+
+/* ---------- dashboard layout (kitchen, admin) ---------- */
+.dash{display:flex;flex-wrap:wrap;min-height:100vh}
+.side{flex:1 1 240px;max-width:260px;background:var(--ink);padding:24px 16px;display:flex;flex-direction:column;gap:6px}
+.side a,.side button.nav{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;color:#C9D1CC;text-decoration:none;font-weight:600;font-size:16px;border:0;background:transparent;text-align:left;transition:background .2s,color .2s}
+.side a:hover,.side button.nav:hover{color:#fff;background:var(--ink-2)}
+.side .on{background:var(--green)!important;color:#fff!important}
+.dash main{flex:999 1 640px;min-width:0;padding:28px}
+@media (max-width:860px){.side{max-width:none;flex-direction:row;flex-wrap:wrap;align-items:center}.side .spacer{display:none}}
+
+/* ---------- map (schematic) ---------- */
+.map{position:relative;overflow:hidden;background-color:var(--map);background-image:linear-gradient(#DCE4DF 3px,transparent 3px),linear-gradient(90deg,#DCE4DF 3px,transparent 3px),linear-gradient(#E2E9E4 1px,transparent 1px),linear-gradient(90deg,#E2E9E4 1px,transparent 1px);background-size:160px 160px,160px 160px,40px 40px,40px 40px}
+.map .park{position:absolute;border-radius:24px;background:#CFE8D7}.map .water{position:absolute;border-radius:40px;background:#CFE3EE}
+.pin{position:absolute;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;border:3px solid #fff;box-shadow:0 6px 16px rgba(0,0,0,.25);overflow:hidden;z-index:2}
+.pin img{width:100%;height:100%;object-fit:cover}
+.pin.rider{background:var(--ink);animation:pulse 1.6s infinite;transition:left .4s linear,top .4s linear;z-index:3}
+.ping{position:absolute;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;background:var(--green);animation:ping 1.8s infinite}
+.seg{position:absolute;background:var(--ink);border-radius:4px}.seg i{position:absolute;inset:1px;border-radius:3px;background:var(--route)}
+.seg.todo{background:transparent}.seg.todo i{background:repeating-linear-gradient(90deg,#9AA39E 0 10px,transparent 10px 18px)}
+.seg.v.todo i{background:repeating-linear-gradient(180deg,#9AA39E 0 10px,transparent 10px 18px)}
+.seg.gone{opacity:.2}
+.tag{position:absolute;background:#fff;border-radius:10px;padding:6px 10px;font-weight:700;font-size:13px;box-shadow:0 2px 8px rgba(0,0,0,.12);white-space:nowrap;z-index:2}
+
+/* ---------- overlays ---------- */
+.toasts{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);display:flex;flex-direction:column;gap:8px;z-index:100;align-items:center}
+.toast{background:var(--ink);color:#fff;padding:13px 22px;border-radius:999px;font-weight:700;box-shadow:0 12px 30px rgba(0,0,0,.25);animation:toastIn .3s both}
+.toast.err{background:#8E1F16}
+.backdrop{position:fixed;inset:0;background:rgba(17,19,17,.55);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:90;padding:16px;animation:fade .2s both}
+.dialog{width:min(480px,100%);background:#fff;border-radius:28px;overflow:hidden;animation:sheet .3s cubic-bezier(.2,.8,.2,1) both;max-height:92vh;overflow-y:auto}
+
+/* ---------- motion ---------- */
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes pop{0%{transform:scale(.6);opacity:0}70%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}
+@keyframes sheet{from{opacity:0;transform:translateY(30px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes shake{10%,90%{transform:translateX(-2px)}20%,80%{transform:translateX(4px)}30%,50%,70%{transform:translateX(-8px)}40%,60%{transform:translateX(8px)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(17,19,17,.45)}100%{box-shadow:0 0 0 20px rgba(17,19,17,0)}}
+@keyframes ping{0%{transform:scale(.6);opacity:.8}100%{transform:scale(2.2);opacity:0}}
+@keyframes glow{0%,100%{box-shadow:0 0 0 0 rgba(19,160,79,.55)}50%{box-shadow:0 0 0 9px rgba(19,160,79,0)}}
+@keyframes shimmer{from{background-position:-200% 0}to{background-position:200% 0}}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-12px) rotate(1deg)}}
+@keyframes kenburns{from{transform:scale(1.05)}to{transform:scale(1.18) translate(-2%,-2%)}}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes confetti{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(170px) rotate(540deg);opacity:0}}
+@keyframes toastIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes heart{0%{transform:scale(1)}40%{transform:scale(1.35)}100%{transform:scale(1)}}
+@keyframes radar{0%{transform:translate(-50%,-50%) scale(.2);opacity:.7}100%{transform:translate(-50%,-50%) scale(1);opacity:0}}
+@keyframes dash{to{background-position:40px 0}}
+@keyframes blink{50%{opacity:0}}
+.up{animation:fadeUp .55s cubic-bezier(.2,.8,.2,1) both}
+.pop{animation:pop .4s both}
+.shake{animation:shake .45s}
+.glow{animation:glow 1.6s 3}
+.float{animation:float 6s ease-in-out infinite}
+.spin{width:20px;height:20px;border-radius:50%;border:3px solid rgba(255,255,255,.35);border-top-color:#fff;animation:spin .8s linear infinite;display:inline-block}
+.spin.dark{border-color:rgba(17,19,17,.15);border-top-color:var(--ink)}
+.shine{background:linear-gradient(90deg,rgba(255,255,255,.14) 0%,rgba(255,255,255,.34) 50%,rgba(255,255,255,.14) 100%);background-size:200% 100%;animation:shimmer 3.5s linear infinite}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}

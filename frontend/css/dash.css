@@ -1,0 +1,41 @@
+/* Kitchen Portal + Admin dashboards */
+.side .head{display:flex;align-items:center;gap:10px;padding:4px 8px 18px;color:#fff}
+.side .head b{font-size:22px;display:block}.side .head small{font-size:12px;letter-spacing:.12em;color:var(--green-soft)}
+.side .rest{border-radius:18px;overflow:hidden;margin:6px 0 14px;position:relative;height:110px}
+.side .rest .photo{height:100%}
+.side .rest span{position:absolute;left:12px;bottom:10px;right:12px;color:#fff;font-weight:700;z-index:1;text-shadow:0 2px 8px rgba(0,0,0,.6)}
+.side .rest::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(0,0,0,.7))}
+.side .spacer{flex:1}
+.side .nav .cnt{margin-left:auto;background:var(--green);color:#fff;border-radius:999px;font-size:12px;padding:2px 8px}
+.side .nav.locked{opacity:.45}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px}
+.tile{padding:18px 20px;animation:fadeUp .45s both}
+.tile small{font-size:12px;letter-spacing:.1em;color:var(--muted);font-weight:700;text-transform:uppercase}
+.tile b{display:block;font-size:30px;font-weight:800;margin-top:4px}
+.board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;align-items:start}
+@media (max-width:1100px){.board{grid-template-columns:1fr}}
+.colh{display:flex;align-items:center;justify-content:space-between;padding:4px 6px 12px;font-weight:800;font-size:18px}
+.colh span.n{background:var(--ink);color:#fff;border-radius:999px;font-size:13px;padding:2px 10px}
+.lane{background:#EAEFEC;border-radius:24px;padding:12px;min-height:220px;display:flex;flex-direction:column;gap:12px}
+.ocard{padding:16px;display:flex;flex-direction:column;gap:10px;animation:sheet .4s both}
+.ocard.new{animation:sheet .4s both,glow 1.4s .4s 3}
+.timer{font-weight:800;font-size:14px;padding:3px 10px;border-radius:999px;background:var(--green-tint);color:var(--green-text)}
+.timer.late{background:var(--err-bg);color:var(--err)}
+.mrow{display:grid;grid-template-columns:64px minmax(0,1fr) 130px 70px;gap:14px;align-items:center;padding:12px 16px;border-bottom:1px solid #EEF1EF;animation:fadeUp .35s both;transition:background .2s,opacity .3s}
+.mrow:hover{background:#FAFCFB}
+.mrow.off{opacity:.55}.mrow.off .photo img{filter:grayscale(1)}
+.mrow .photo{width:64px;height:64px;border-radius:14px}
+@media (max-width:640px){.mrow{grid-template-columns:52px minmax(0,1fr) 90px 60px;gap:8px}.mrow .photo{width:52px;height:52px}}
+.prow{display:grid;grid-template-columns:100px 140px 1fr 1fr 1fr 110px;gap:12px;align-items:center;padding:14px 18px;border-bottom:1px solid #EEF1EF;animation:fadeUp .35s both}
+.prow.h{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700;animation:none}
+.split{display:flex;height:12px;border-radius:999px;overflow:hidden;background:#EEF1EF}
+.split i{display:block;height:100%;animation:grow .9s cubic-bezier(.2,.8,.2,1) both}
+@keyframes grow{from{width:0}}
+.chk{display:flex;gap:10px;align-items:center;font-size:15px}
+.chk b{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;flex:none}
+.chk b.now{animation:pulseA 1.8s infinite}
+@keyframes pulseA{0%,100%{box-shadow:0 0 0 0 rgba(224,159,0,.5)}50%{box-shadow:0 0 0 8px rgba(224,159,0,0)}}
+.day{display:grid;grid-template-columns:110px 60px minmax(0,1fr) minmax(0,1fr);gap:10px;align-items:center}
+.day.closed{opacity:.5}
+.stamp{position:absolute;top:40%;left:50%;transform:translate(-50%,-50%) rotate(-12deg);border:4px solid;border-radius:14px;padding:6px 18px;font-weight:800;font-size:28px;letter-spacing:.1em;background:rgba(255,255,255,.85);animation:pop .35s both;z-index:3}
+.out{transition:transform .5s,opacity .5s;transform:translateX(60px);opacity:0}

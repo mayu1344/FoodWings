@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Kitchen Portal: live orders</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body{margin:0;font-family:'Outfit',sans-serif;color:#111311;background:#F4F7F5}
+a{color:#0E7A3C}a:hover{color:#095A2C}
+@keyframes drop{from{opacity:0;transform:translateY(-16px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes glow{0%,100%{box-shadow:0 0 0 0 rgba(19,160,79,.55)}50%{box-shadow:0 0 0 8px rgba(19,160,79,0)}}
+@keyframes ring{0%,100%{transform:rotate(0)}20%{transform:rotate(-18deg)}40%{transform:rotate(16deg)}60%{transform:rotate(-10deg)}80%{transform:rotate(6deg)}}
+@keyframes count{from{transform:translateY(8px);opacity:0}to{transform:none;opacity:1}}
+.side a{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;color:#C9D1CC;text-decoration:none;font-weight:600;font-size:16px;transition:background .2s,color .2s}
+.side a:hover{color:#fff;background:#1E221F}.side a.on{background:#13A04F;color:#fff}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 18px;border-radius:999px;font-family:'Outfit',sans-serif;font-weight:700;font-size:15px;border:0;text-decoration:none;box-sizing:border-box;transition:transform .15s,background .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn-green{background:#0E8A42;color:#fff}.btn-dark{background:#111311;color:#fff}.btn-ghost{background:#fff;color:#111311;border:1.5px solid #D6DCD8}
+.card{background:#fff;border-radius:20px;box-shadow:0 1px 2px rgba(17,19,17,.06),0 8px 22px rgba(17,19,17,.06)}
+.order{animation:drop .45s cubic-bezier(.2,.8,.2,1) both;transition:transform .2s}
+.order:hover{transform:translateY(-3px)}
+.order.new{animation:drop .45s both,glow 1.6s 3}
+.col{background:#E9EEEB;border-radius:22px;padding:14px;display:flex;flex-direction:column;gap:12px;min-width:0;min-height:420px}
+.colh{display:flex;justify-content:space-between;align-items:center;padding:4px 6px;font-weight:800;font-size:17px}
+.cnt{background:#fff;border-radius:999px;padding:2px 10px;font-size:13px;display:inline-block;animation:count .3s both}
+.pay{font-size:12px;font-weight:700;padding:3px 8px;border-radius:8px;background:#F4F7F5}
+.switch{width:56px;height:32px;border-radius:999px;background:#C9D1CC;position:relative;border:0;transition:background .25s}
+.switch span{position:absolute;left:3px;top:3px;width:26px;height:26px;border-radius:50%;background:#fff;transition:left .25s;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+.switch.on{background:#13A04F}.switch.on span{left:27px}
+.thumb{width:44px;height:44px;border-radius:12px;overflow:hidden;flex:none;background:#BFE6CD}.thumb img{width:100%;height:100%;object-fit:cover}
+.bell{animation:ring 1s 2}
+.tile b{display:block;animation:count .35s both}
+.late{color:#A8261B;font-weight:700}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div style="min-height: 960px; display: flex; flex-wrap: wrap">
+  <aside class="side" style="flex: 1 1 240px; max-width: 260px; background: #111311; padding: 24px 16px; display: flex; flex-direction: column; gap: 6px; box-sizing: border-box">
+    <div style="display: flex; align-items: center; gap: 10px; padding: 4px 8px 20px">
+      <span style="width: 40px; height: 40px; border-radius: 50%; background: #13A04F; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11h16a8 8 0 0 1-16 0z"></path><path d="M9 7c0-2 1-3 3-3"></path><path d="M14 8c1-2 3-2 4-1"></path></svg></span>
+      <span style="display: flex; flex-direction: column; color: #fff"><b style="font-size: 22px">Foodu</b><span style="font-size: 12px; letter-spacing: .12em; color: #9FE0B8">KITCHEN PORTAL</span></span>
+    </div>
+    <a class="on" href="KitchenOrders.dc.html">Live orders</a>
+    <a href="KitchenMenu.dc.html">Menu &amp; stock</a>
+    <a href="KitchenPayouts.dc.html">Payouts</a>
+    <a href="KitchenOnboarding.dc.html">Restaurant profile</a>
+    <div style="margin-top: auto; border-radius: 18px; overflow: hidden; position: relative; height: 140px">
+      <img src="{{img.restaurant}}" alt="" style="width: 100%; height: 100%; object-fit: cover; filter: brightness(.6)">
+      <span style="position: absolute; left: 14px; bottom: 12px; color: #fff; font-size: 14px"><b>Manjunath Gowda</b><br>Owner</span>
+    </div>
+    <a href="SignIn.dc.html" style="color: #9FE0B8">Log out</a>
+  </aside>
+
+  <main style="flex: 999 1 640px; min-width: 0; padding: 28px; display: flex; flex-direction: column; gap: 22px; box-sizing: border-box">
+    <header style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px">
+      <div>
+        <h1 style="margin: 0; font-weight: 800; font-size: 32px">Spice Route Biryani House</h1>
+        <span style="color: #5D6560; font-size: 15px">Jayanagar 4th Block · Open today 11:00 to 23:30</span>
+      </div>
+      <div style="display: flex; gap: 12px; align-items: center">
+        <button type="button" class="btn btn-ghost" onClick="{{simulate}}"><svg class="{{bellCls}}" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#111311" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 8 3 8H3s3-1 3-8"></path><path d="M10 21a2 2 0 0 0 4 0"></path></svg>Simulate new order</button>
+        <div class="card" style="display: flex; align-items: center; gap: 14px; padding: 10px 16px; border-radius: 999px">
+          <span style="font-weight: 700; color: {{openColor}}">{{openText}}</span>
+          <button type="button" class="{{switchCls}}" aria-label="Accepting orders" aria-pressed="{{openOn}}" onClick="{{toggleOpen}}"><span></span></button>
+        </div>
+      </div>
+    </header>
+
+    <section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px">
+      <sc-for list="{{tiles}}" as="t" hint-placeholder-count="4">
+        <div class="card tile" style="padding: 18px"><span style="font-size: 13px; color: #5D6560; font-weight: 600">{{t.label}}</span><b style="font-weight: 800; font-size: 30px">{{t.value}}</b></div>
+      </sc-for>
+    </section>
+
+    <section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; align-items: start">
+      <sc-for list="{{cols}}" as="c" hint-placeholder-count="3">
+        <div class="col">
+          <div class="colh"><span>{{c.title}}</span><span class="cnt">{{c.count}}</span></div>
+          <sc-for list="{{c.orders}}" as="o" hint-placeholder-count="2">
+            <article class="{{o.cls}}" style="padding: 16px; display: flex; flex-direction: column; gap: 10px">
+              <div style="display: flex; justify-content: space-between; align-items: center"><b style="font-size: 17px">#{{o.id}}</b><span class="{{o.ageCls}}" style="font-size: 13px">{{o.ageText}}</span></div>
+              <div style="display: flex; gap: 10px; align-items: center">
+                <span class="thumb"><img src="{{o.img}}" alt=""></span>
+                <span style="font-size: 15px; line-height: 1.35">{{o.items}}</span>
+              </div>
+              <sc-if value="{{o.hasNote}}" hint-placeholder-val="{{ false }}"><span style="font-size: 13px; background: #FFF4D6; color: #7A4B00; border-radius: 8px; padding: 6px 8px">Note: {{o.note}}</span></sc-if>
+              <span style="font-size: 13px; color: #5D6560">{{o.riderText}}</span>
+              <div style="display: flex; justify-content: space-between; align-items: center"><b>₹{{o.total}}</b><span class="pay">{{o.pay}}</span></div>
+              <sc-if value="{{o.canAccept}}" hint-placeholder-val="{{ false }}"><button type="button" class="btn btn-green" onClick="{{o.accept}}">Accept &amp; find rider</button></sc-if>
+              <sc-if value="{{o.canReady}}" hint-placeholder-val="{{ false }}"><button type="button" class="btn btn-dark" onClick="{{o.ready}}">Mark food ready</button></sc-if>
+              <sc-if value="{{o.waiting}}" hint-placeholder-val="{{ false }}"><span style="font-size: 13px; color: #5D6560; text-align: center">The rider confirms pickup in their app</span></sc-if>
+            </article>
+          </sc-for>
+          <sc-if value="{{c.empty}}" hint-placeholder-val="{{ false }}"><span style="text-align: center; color: #7B847F; font-size: 14px; padding: 24px 0">Nothing here right now</span></sc-if>
+        </div>
+      </sc-for>
+    </section>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":960}}'>
+const IMG = {
+  restaurant: '/_blob/916f486b3a2112fefec2e2d0d134500d', biryani: '/_blob/2b93675217b8cf367d18aed2a6f9a309',
+  north: '/_blob/55f3e1023ccff0a1700822ff8d287727', south: '/_blob/216d34ef9a27c2647e07f72278a35947', desserts: '/_blob/100d63858d67bb12acb52423c7f1c7aa'
+};
+const NEW_POOL = [
+  { items: '2 × Chicken 65', total: 520, pay: 'UPI · PAID', img: IMG.south },
+  { items: '1 × Veg Biryani · 1 × Gulab Jamun', total: 330, pay: 'CASH ON DELIVERY', img: IMG.biryani },
+  { items: '1 × Mutton Biryani · 2 × Gulab Jamun', total: 600, pay: 'CARD · PAID', img: IMG.north }
+];
+const RIDERS = ['Suresh B', 'Prakash Naik', 'Venkatesh R'];
+class Component extends DCLogic {
+  constructor(p) {
+    super(p);
+    this.state = { open: true, ring: 0, next: 9006, tick: 0, orders: [
+      { id: 9005, status: 'NEW', items: '1 × Chicken Dum Biryani (+ Extra Raita) · 1 × Gulab Jamun', total: 440, pay: 'CARD · PAID', note: 'Less spicy please', img: IMG.biryani, age: 120, rider: '' },
+      { id: 9004, status: 'PREPARING', items: '2 × Veg Biryani · 1 × Chicken 65', total: 740, pay: 'UPI · PAID', img: IMG.biryani, age: 720, rider: 'Prakash Naik' },
+      { id: 9003, status: 'PREPARING', items: '1 × Mutton Biryani', total: 420, pay: 'CASH ON DELIVERY', img: IMG.north, age: 300, rider: '' },
+      { id: 9002, status: 'READY', items: '1 × Chicken Dum Biryani · 2 × Gulab Jamun', total: 500, pay: 'CARD · PAID', img: IMG.desserts, age: 180, rider: 'Suresh B' }
+    ] };
+  }
+  componentDidMount() { this.t = setInterval(() => this.setState({ tick: this.state.tick + 1, orders: this.state.orders.map((o) => ({ ...o, age: o.age + 1 })) }), 1000); }
+  componentWillUnmount() { clearInterval(this.t); }
+  update(id, patch) { this.setState({ orders: this.state.orders.map((o) => o.id === id ? { ...o, ...patch } : o) }); }
+  renderVals() {
+    const s = this.state;
+    const fmt = (sec) => sec < 60 ? `${sec}s` : `${Math.floor(sec / 60)} min`;
+    const card = (o) => ({ ...o, cls: o.status === 'NEW' ? 'card order new' : 'card order', hasNote: !!o.note,
+      ageText: o.status === 'NEW' ? `${fmt(o.age)} ago` : o.status === 'READY' ? `ready ${fmt(o.age)}` : `${fmt(o.age)} cooking`,
+      ageCls: o.status === 'PREPARING' && o.age > 1200 ? 'late' : '',
+      riderText: o.status === 'NEW' ? 'Waiting for you to accept' : o.rider ? `Rider: ${o.rider}${o.status === 'READY' ? ' · at the counter' : ' · on the way'}` : 'Finding a rider nearby…',
+      canAccept: o.status === 'NEW', canReady: o.status === 'PREPARING', waiting: o.status === 'READY',
+      accept: () => { this.update(o.id, { status: 'PREPARING', age: 0 }); setTimeout(() => this.update(o.id, { rider: RIDERS[o.id % 3] }), 2000); },
+      ready: () => { this.update(o.id, { status: 'READY', age: 0 }); setTimeout(() => this.setState({ orders: this.state.orders.filter((x) => x.id !== o.id) }), 9000); } });
+    const by = (st) => s.orders.filter((o) => o.status === st).map(card);
+    const cols = [['New', 'NEW'], ['Preparing', 'PREPARING'], ['Ready for pickup', 'READY']].map(([title, st]) => { const orders = by(st); return { title, orders, count: orders.length, empty: orders.length === 0 }; });
+    return {
+      img: IMG, cols,
+      tiles: [{ label: 'NEW', value: cols[0].count }, { label: 'PREPARING', value: cols[1].count }, { label: 'READY', value: cols[2].count }, { label: 'AVG PREP TIME', value: '20 min' }],
+      openOn: s.open ? 'true' : 'false', switchCls: s.open ? 'switch on' : 'switch',
+      openText: s.open ? 'Accepting orders' : 'Closed for orders', openColor: s.open ? '#0E7A3C' : '#8E1F16',
+      toggleOpen: () => this.setState({ open: !s.open }),
+      bellCls: s.ring ? 'bell' : '',
+      simulate: () => {
+        if (!s.open) return;
+        const base = NEW_POOL[s.next % NEW_POOL.length];
+        this.setState({ ring: s.ring + 1, next: s.next + 1, orders: [{ id: s.next, status: 'NEW', ...base, age: 0, rider: '' }, ...s.orders] });
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>

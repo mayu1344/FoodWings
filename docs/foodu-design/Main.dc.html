@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Foodu landing page</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body{margin:0;font-family:'Outfit',sans-serif;color:#111311;background:#F4F7F5}
+a{color:#0E7A3C}a:hover{color:#095A2C}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-12px) rotate(1deg)}}
+@keyframes shine{from{background-position:-200% 0}to{background-position:200% 0}}
+@keyframes pop{0%{transform:scale(.9);opacity:0}100%{transform:scale(1);opacity:1}}
+.up{animation:fadeUp .8s cubic-bezier(.2,.8,.2,1) both}
+.d1{animation-delay:.1s}.d2{animation-delay:.25s}.d3{animation-delay:.4s}.d4{animation-delay:.55s}
+.float{animation:float 6s ease-in-out infinite}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 24px;border-radius:999px;font-family:'Outfit',sans-serif;font-weight:600;font-size:16px;border:0;text-decoration:none;box-sizing:border-box;transition:transform .2s,background .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn-dark{background:#111311;color:#fff}.btn-dark:hover{color:#fff;background:#000}
+.btn-outline-w{color:#fff;border:1.5px solid rgba(255,255,255,.9)}.btn-outline-w:hover{color:#fff;background:rgba(255,255,255,.14)}
+.nav a.lnk{color:#fff;text-decoration:none;font-weight:600;font-size:17px;position:relative}
+.nav a.lnk::after{content:"";position:absolute;left:0;right:100%;bottom:-6px;height:2px;background:#fff;transition:right .25s}
+.nav a.lnk:hover{color:#fff}.nav a.lnk:hover::after{right:0}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:999px;background:#E7F6EC;color:#0E7A3C;font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:uppercase}
+.shine{background:linear-gradient(90deg,rgba(255,255,255,.14) 0%,rgba(255,255,255,.34) 50%,rgba(255,255,255,.14) 100%);background-size:200% 100%;animation:shine 3.5s linear infinite}
+.card{background:#fff;border-radius:28px;box-shadow:0 1px 2px rgba(17,19,17,.06),0 12px 32px rgba(17,19,17,.08);transition:transform .3s,box-shadow .3s}
+.applink{text-decoration:none;color:#111311}.applink:hover{color:#111311;transform:translateY(-6px);box-shadow:0 2px 4px rgba(17,19,17,.08),0 24px 48px rgba(17,19,17,.16)}
+.photo{position:relative;overflow:hidden;background:linear-gradient(135deg,#BFE6CD,#7FCB9C)}
+.photo img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s cubic-bezier(.2,.8,.2,1),filter .4s;filter:saturate(1.05)}
+.photo img[src=""]{visibility:hidden}
+.applink:hover .photo img{transform:scale(1.08);filter:saturate(1.25) contrast(1.05)}
+.cat{display:flex;flex-direction:column;align-items:center;gap:10px;border:0;background:transparent;font-family:'Outfit',sans-serif;font-weight:700;font-size:15px;color:#111311;padding:6px;border-radius:20px;transition:transform .2s}
+.cat:hover{transform:translateY(-4px)}
+.cat .photo{width:104px;height:104px;border-radius:50%;box-shadow:0 0 0 3px #fff,0 8px 20px rgba(17,19,17,.12);transition:box-shadow .25s}
+.cat.on .photo{box-shadow:0 0 0 4px #13A04F,0 10px 24px rgba(19,160,79,.35)}
+.cat.on{color:#0E7A3C}
+.sugg{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:14px;text-decoration:none;color:#111311;animation:pop .25s both}
+.sugg:hover{background:#F4F7F5;color:#111311}
+.stepc{transition:transform .4s,box-shadow .4s,background .4s}
+.stepc.on{transform:translateY(-6px);box-shadow:0 2px 4px rgba(17,19,17,.08),0 24px 48px rgba(19,160,79,.25)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div style="min-height: 1800px; display: flex; flex-direction: column">
+  <section style="background: radial-gradient(1200px 500px at 50% 0%, #1DB860 0%, #13A04F 60%, #0F8E45 100%); padding: 0 0 72px; position: relative; overflow: hidden">
+    <div class="photo float" style="position: absolute; left: -30px; top: -30px; width: 320px; height: 250px; border-radius: 0 0 40px 0; box-shadow: 0 20px 40px rgba(0,0,0,.18)"><img src="{{img.groceries}}" alt="Fresh vegetables"></div>
+    <div class="photo float" style="position: absolute; right: -30px; top: -20px; width: 330px; height: 250px; border-radius: 0 0 0 40px; box-shadow: 0 20px 40px rgba(0,0,0,.18); animation-delay: -3s"><img src="{{img.sushi}}" alt="Sushi platter"></div>
+    <div style="max-width: 1280px; margin: 0 auto; padding: 0 24px; position: relative">
+      <nav class="nav" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px; padding: 22px 0 22px 220px">
+        <a href="Main.dc.html" style="display: flex; align-items: center; gap: 12px; text-decoration: none; color: #fff">
+          <span style="width: 52px; height: 52px; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 16px rgba(0,0,0,.15)">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#13A04F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11h16a8 8 0 0 1-16 0z"></path><path d="M9 7c0-2 1-3 3-3"></path><path d="M14 8c1-2 3-2 4-1"></path></svg>
+          </span>
+          <span style="font-weight: 800; font-size: 34px; letter-spacing: -0.02em">Foodu</span>
+        </a>
+        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 28px; padding-right: 230px">
+          <a class="lnk" href="CustomerHome.dc.html">Customer App</a>
+          <a class="lnk" href="KitchenOrders.dc.html">Kitchen Portal</a>
+          <a class="lnk" href="RiderHome.dc.html">Rider HUD</a>
+          <a class="btn btn-outline-w" href="http://localhost:8000/docs">FastAPI Docs ↗</a>
+          <a class="btn btn-dark" href="SignIn.dc.html">Sign In / Register</a>
+        </div>
+      </nav>
+      <div style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 26px; padding-top: 48px">
+        <span class="up shine" style="display: inline-flex; padding: 8px 20px; border-radius: 999px; color: #fff; font-weight: 700; font-size: 14px; letter-spacing: .1em; text-transform: uppercase">✦ {{offer}}</span>
+        <h1 class="up d1" style="margin: 0; color: #fff; font-weight: 800; font-size: 72px; line-height: 1.05; letter-spacing: -0.03em; max-width: 980px; text-shadow: 0 4px 24px rgba(0,0,0,.12)">Delicious Food &amp; Fresh Groceries, Delivered at Your Door!</h1>
+        <div class="up d2" style="width: 100%; max-width: 1000px; position: relative">
+          <form style="display: flex; flex-wrap: wrap; background: #fff; border-radius: 22px; overflow: hidden; box-shadow: 0 16px 40px rgba(0,0,0,.16)">
+            <label style="display: flex; align-items: center; gap: 12px; padding: 0 24px; min-height: 72px; flex: 1 1 300px; border-right: 1px solid #E4E8E5">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D6336C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>
+              <select aria-label="Delivery address" style="border: 0; font-family: 'Outfit', sans-serif; font-size: 18px; font-weight: 600; color: #111311; background: transparent; flex: 1; outline: none">
+                <option>Home · Jayanagar 3rd Block</option>
+                <option>Work · Koramangala</option>
+              </select>
+            </label>
+            <label style="display: flex; align-items: center; gap: 12px; padding: 0 24px; min-height: 72px; flex: 2 1 400px">
+              <input type="search" aria-label="Search dishes or restaurants" placeholder="What are you craving today?" value="{{q}}" onInput="{{onSearch}}" style="border: 0; flex: 1; font-family: 'Outfit', sans-serif; font-size: 18px; outline: none; color: #111311">
+              <a href="CustomerHome.dc.html" aria-label="Search" style="background: #13A04F; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+              </a>
+            </label>
+          </form>
+          <sc-if value="{{showSugg}}" hint-placeholder-val="{{ false }}">
+            <div style="position: absolute; left: 0; right: 0; top: calc(100% + 10px); background: #fff; border-radius: 20px; padding: 10px; box-shadow: 0 20px 48px rgba(0,0,0,.18); text-align: left; z-index: 5; display: flex; flex-direction: column; gap: 2px">
+              <sc-for list="{{sugg}}" as="s" hint-placeholder-count="3">
+                <a class="sugg" href="CustomerMenu.dc.html">
+                  <span class="photo" style="width: 48px; height: 48px; border-radius: 12px"><img src="{{s.img}}" alt=""></span>
+                  <span style="display: flex; flex-direction: column"><b style="font-size: 16px">{{s.name}}</b><span style="font-size: 13px; color: #5D6560">{{s.where}}</span></span>
+                  <span style="margin-left: auto; font-weight: 700">₹{{s.price}}</span>
+                </a>
+              </sc-for>
+              <sc-if value="{{noSugg}}" hint-placeholder-val="{{ false }}"><span style="padding: 12px 14px; color: #5D6560">No dishes match “{{q}}”</span></sc-if>
+            </div>
+          </sc-if>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="background: linear-gradient(#0F8E45 0, #0F8E45 140px, #F4F7F5 140px); padding-bottom: 40px">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 0 24px; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 28px">
+      <a class="card applink up d2" href="CustomerHome.dc.html" style="padding: 32px; display: flex; flex-direction: column; gap: 12px">
+        <span style="font-weight: 800; font-size: 32px; letter-spacing: -0.01em">FOOD DELIVERY</span>
+        <span style="font-weight: 600; font-size: 15px; letter-spacing: .12em; color: #5D6560">TOP RESTAURANTS NEAR YOU</span>
+        <span class="chip" style="align-self: flex-start">Up to 60% off</span>
+        <div class="photo" style="height: 210px; margin-top: 14px; border-radius: 20px"><img src="{{img.burger}}" alt="Burger"></div>
+      </a>
+      <a class="card applink up d3" href="KitchenOrders.dc.html" style="padding: 32px; display: flex; flex-direction: column; gap: 12px">
+        <span style="font-weight: 800; font-size: 32px; letter-spacing: -0.01em">KITCHEN PORTAL</span>
+        <span style="font-weight: 600; font-size: 15px; letter-spacing: .12em; color: #5D6560">FOR RESTAURANT PARTNERS</span>
+        <span class="chip" style="align-self: flex-start">Live orders &amp; payouts</span>
+        <div class="photo" style="height: 210px; margin-top: 14px; border-radius: 20px"><img src="{{img.restaurant}}" alt="Restaurant"></div>
+      </a>
+      <a class="card applink up d4" href="RiderHome.dc.html" style="padding: 32px; display: flex; flex-direction: column; gap: 12px">
+        <span style="font-weight: 800; font-size: 32px; letter-spacing: -0.01em">RIDER HUD</span>
+        <span style="font-weight: 600; font-size: 15px; letter-spacing: .12em; color: #5D6560">FOR DELIVERY PARTNERS</span>
+        <span class="chip" style="align-self: flex-start">Earn on every trip</span>
+        <div class="photo" style="height: 210px; margin-top: 14px; border-radius: 20px"><img src="{{img.dineout}}" alt="Food ready to deliver"></div>
+      </a>
+    </div>
+  </section>
+
+  <section style="padding: 40px 24px 20px">
+    <div style="max-width: 1280px; margin: 0 auto; display: flex; flex-direction: column; gap: 22px">
+      <h2 style="margin: 0; font-weight: 800; font-size: 32px; letter-spacing: -0.02em">What's on your mind?</h2>
+      <div style="display: flex; flex-wrap: wrap; gap: 18px">
+        <sc-for list="{{cats}}" as="c" hint-placeholder-count="8">
+          <button type="button" class="{{c.cls}}" onClick="{{c.pick}}" aria-pressed="{{c.on}}">
+            <span class="photo"><img src="{{c.img}}" alt=""></span>{{c.name}}
+          </button>
+        </sc-for>
+      </div>
+      <p style="margin: 0; font-size: 15px; color: #5D6560">{{catLine}}</p>
+    </div>
+  </section>
+
+  <section style="padding: 48px 24px 80px">
+    <div style="max-width: 1280px; margin: 0 auto; display: flex; flex-direction: column; gap: 36px">
+      <div style="display: flex; flex-direction: column; gap: 10px; align-items: center; text-align: center">
+        <span class="chip">How it works</span>
+        <h2 style="margin: 0; font-weight: 800; font-size: 44px; letter-spacing: -0.02em">One order, three apps, one database</h2>
+        <p style="margin: 0; font-size: 18px; color: #5D6560; max-width: 640px">The customer orders, the kitchen cooks and the nearest rider delivers. Everyone sees the same order in real time.</p>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px">
+        <sc-for list="{{steps}}" as="s" hint-placeholder-count="4">
+          <div class="{{s.cls}}" style="padding: 28px; display: flex; flex-direction: column; gap: 10px">
+            <span style="width: 44px; height: 44px; border-radius: 50%; background: {{s.dot}}; color: #fff; font-weight: 800; font-size: 20px; display: flex; align-items: center; justify-content: center">{{s.n}}</span>
+            <span style="font-weight: 700; font-size: 20px">{{s.title}}</span>
+            <span style="font-size: 15px; color: #5D6560">{{s.text}}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <footer style="margin-top: auto; background: #111311; color: #C9D1CC; padding: 36px 24px">
+    <div style="max-width: 1280px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; font-size: 15px">
+      <span style="color: #fff; font-weight: 800; font-size: 22px">Foodu</span>
+      <span>Your card's CVV is never stored. Payments go through a secure gateway.</span>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1800}}'>
+const IMG = {
+  groceries: '/_blob/1000db248a9d53cc096f7452a10734c7', sushi: '/_blob/4d392589680f9a9f0f12a37a20b10d43',
+  burger: '/_blob/27b73c4f7073a2405a928bde95503574', restaurant: '/_blob/916f486b3a2112fefec2e2d0d134500d',
+  dineout: '/_blob/d7edc21fb631b8e2ebcc7d360ddee88a', biryani: '/_blob/2b93675217b8cf367d18aed2a6f9a309',
+  pizza: '/_blob/c0dee0bba6f6265de6af739b0d748a80', dosa: '/_blob/aad2de03c325c740dd455d9f530c9e3a',
+  idli: '/_blob/76a88631f5f617db5c26130abcce9db4', north: '/_blob/55f3e1023ccff0a1700822ff8d287727',
+  chinese: '/_blob/4c89feff411072a510cb4c1257683459', desserts: '/_blob/100d63858d67bb12acb52423c7f1c7aa',
+  rolls: '/_blob/ac6a7fd317228212cefc85cb57185f45'
+};
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { q: '', cat: 'Biryani', step: 0, offer: 0 }; }
+  componentDidMount() {
+    this.t = setInterval(() => this.setState({ step: (this.state.step + 1) % 4, offer: (this.state.offer + 1) % 3 }), 2600);
+  }
+  componentWillUnmount() { clearInterval(this.t); }
+  renderVals() {
+    const dishes = [
+      { name: 'Chicken Dum Biryani', where: 'Spice Route Biryani House', price: 320, img: IMG.biryani },
+      { name: 'Veg Biryani', where: 'Spice Route Biryani House', price: 240, img: IMG.biryani },
+      { name: 'Masala Dosa', where: 'Udupi Grand Veg', price: 110, img: IMG.dosa },
+      { name: 'Idli Vada', where: 'Udupi Grand Veg', price: 80, img: IMG.idli },
+      { name: 'Margherita Pizza (Medium)', where: 'Slice Street Pizza', price: 299, img: IMG.pizza },
+      { name: 'Farmhouse Pizza (Medium)', where: 'Slice Street Pizza', price: 399, img: IMG.pizza },
+      { name: 'Gulab Jamun (2 pcs)', where: 'Spice Route Biryani House', price: 90, img: IMG.desserts }
+    ];
+    const q = this.state.q.trim().toLowerCase();
+    const sugg = q ? dishes.filter((d) => (d.name + ' ' + d.where).toLowerCase().includes(q)).slice(0, 5) : [];
+    const catsRaw = [['Biryani', IMG.biryani, 'Spice Route Biryani House'], ['Dosa', IMG.dosa, 'Udupi Grand Veg'], ['Idli', IMG.idli, 'Udupi Grand Veg'],
+      ['Pizza', IMG.pizza, 'Slice Street Pizza'], ['North Indian', IMG.north, 'Spice Route Biryani House'], ['Chinese', IMG.chinese, 'no restaurant near you yet'],
+      ['Desserts', IMG.desserts, 'Spice Route Biryani House'], ['Thali', IMG.rolls, 'no restaurant near you yet']];
+    const cats = catsRaw.map(([name, img]) => ({ name, img, on: this.state.cat === name ? 'true' : 'false', cls: this.state.cat === name ? 'cat on' : 'cat', pick: () => this.setState({ cat: name }) }));
+    const sel = catsRaw.find((c) => c[0] === this.state.cat);
+    const offers = ['30% off special offers & instant delivery', 'WELCOME50 · 50% off your first order', 'FLAT75 · ₹75 off above ₹299'];
+    const stepsRaw = [['1', 'Order & pay', 'Pick dishes, apply a coupon, pay by card, UPI or cash.'], ['2', 'Kitchen accepts', 'The restaurant accepts and starts cooking. A rider nearby gets the offer.'],
+      ['3', 'Rider picks up', 'The rider follows the map to the kitchen, then to your door.'], ['4', 'Delivered & rated', 'Track it live, then rate the food and the delivery.']];
+    return {
+      img: IMG, q: this.state.q, offer: offers[this.state.offer],
+      onSearch: (e) => this.setState({ q: e.target.value }),
+      showSugg: q.length > 0, sugg, noSugg: q.length > 0 && sugg.length === 0,
+      cats, catLine: sel ? `${sel[0]}: ${sel[2]}` : '',
+      steps: stepsRaw.map(([n, title, text], i) => ({ n, title, text, cls: i === this.state.step ? 'card stepc on' : 'card stepc', dot: i === this.state.step ? '#13A04F' : '#111311' }))
+    };
+  }
+}
+</script>
+</body>
+</html>

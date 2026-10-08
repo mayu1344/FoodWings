@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Foodu · Admin approvals</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="css/foodu.css">
+<link rel="stylesheet" href="css/dash.css">
+<style>
+.agrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px}
+.acard{overflow:hidden;position:relative;animation:fadeUp .45s both}
+.acard .photo{height:150px}
+.acard .b{padding:18px;display:flex;flex-direction:column;gap:10px}
+.kv{display:grid;grid-template-columns:110px 1fr;gap:6px 10px;font-size:14px}
+.kv span{color:var(--muted)}
+.doc{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;font-size:12px;font-weight:700}
+</style>
+</head>
+<body>
+<div class="dash">
+  <aside class="side" id="side"></aside>
+  <main id="view"></main>
+</div>
+<script src="js/foodu.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

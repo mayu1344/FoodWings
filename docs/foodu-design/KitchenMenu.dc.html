@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Kitchen Portal: menu and stock</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body{margin:0;font-family:'Outfit',sans-serif;color:#111311;background:#F4F7F5}
+a{color:#0E7A3C}a:hover{color:#095A2C}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes toast{0%{opacity:0;transform:translate(-50%,20px)}15%,85%{opacity:1;transform:translate(-50%,0)}100%{opacity:0}}
+.side a{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;color:#C9D1CC;text-decoration:none;font-weight:600;font-size:16px;transition:background .2s,color .2s}
+.side a:hover{color:#fff;background:#1E221F}.side a.on{background:#13A04F;color:#fff}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 18px;border-radius:999px;font-family:'Outfit',sans-serif;font-weight:700;font-size:15px;border:0;text-decoration:none;box-sizing:border-box;transition:transform .15s}
+.btn:hover{transform:translateY(-2px)}
+.btn-dark{background:#111311;color:#fff}.btn-ghost{background:#fff;color:#111311;border:1.5px solid #D6DCD8}
+.card{background:#fff;border-radius:22px;box-shadow:0 1px 2px rgba(17,19,17,.06),0 8px 22px rgba(17,19,17,.06)}
+.tab{min-height:42px;padding:0 16px;border-radius:999px;border:1.5px solid #D6DCD8;background:#fff;font-family:'Outfit',sans-serif;font-weight:700;font-size:14px;color:#111311;transition:all .2s}
+.tab.on{background:#111311;color:#fff;border-color:#111311}
+.dish{display:grid;grid-template-columns:minmax(260px,2fr) minmax(100px,1fr) 130px minmax(160px,1.4fr) 90px;gap:16px;align-items:center;padding:14px 18px;border-bottom:1px solid #EEF1EF;animation:fadeUp .4s both;transition:background .3s,opacity .3s}
+.dish:hover{background:#FAFCFB}
+.dish.off{opacity:.6}
+.dish.off img{filter:grayscale(1)}
+.thumb{width:64px;height:64px;border-radius:16px;overflow:hidden;flex:none;background:#BFE6CD}
+.thumb img{width:100%;height:100%;object-fit:cover;transition:transform .5s,filter .4s}
+.dish:hover .thumb img{transform:scale(1.1)}
+.veg{width:14px;height:14px;border:1.5px solid #138A44;border-radius:3px;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.veg i{width:6px;height:6px;border-radius:50%;background:#138A44}.nv{border-color:#A8261B}.nv i{background:#A8261B}
+.price{width:100%;min-height:42px;border:1.5px solid #D6DCD8;border-radius:12px;padding:0 10px;font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;box-sizing:border-box;transition:border .2s,box-shadow .2s}
+.price:focus{outline:none;border-color:#13A04F;box-shadow:0 0 0 4px rgba(19,160,79,.15)}
+.sw{width:52px;height:30px;border-radius:999px;border:0;position:relative;background:#C9D1CC;transition:background .25s}
+.sw span{position:absolute;left:3px;top:3px;width:24px;height:24px;border-radius:50%;background:#fff;transition:left .25s;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+.sw.on{background:#13A04F}.sw.on span{left:25px}
+.head{display:grid;grid-template-columns:minmax(260px,2fr) minmax(100px,1fr) 130px minmax(160px,1.4fr) 90px;gap:16px;padding:12px 18px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#5D6560;font-weight:700;border-bottom:1px solid #E4E8E5}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div style="min-height: 960px; display: flex; flex-wrap: wrap; position: relative">
+  <aside class="side" style="flex: 1 1 240px; max-width: 260px; background: #111311; padding: 24px 16px; display: flex; flex-direction: column; gap: 6px; box-sizing: border-box">
+    <div style="display: flex; align-items: center; gap: 10px; padding: 4px 8px 20px">
+      <span style="width: 40px; height: 40px; border-radius: 50%; background: #13A04F; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11h16a8 8 0 0 1-16 0z"></path><path d="M9 7c0-2 1-3 3-3"></path><path d="M14 8c1-2 3-2 4-1"></path></svg></span>
+      <span style="display: flex; flex-direction: column; color: #fff"><b style="font-size: 22px">Foodu</b><span style="font-size: 12px; letter-spacing: .12em; color: #9FE0B8">KITCHEN PORTAL</span></span>
+    </div>
+    <a href="KitchenOrders.dc.html">Live orders</a>
+    <a class="on" href="KitchenMenu.dc.html">Menu &amp; stock</a>
+    <a href="KitchenPayouts.dc.html">Payouts</a>
+    <a href="KitchenOnboarding.dc.html">Restaurant profile</a>
+  </aside>
+  <main style="flex: 999 1 640px; min-width: 0; padding: 28px; display: flex; flex-direction: column; gap: 18px; box-sizing: border-box">
+    <header style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px">
+      <div>
+        <h1 style="margin: 0; font-weight: 800; font-size: 32px">Menu &amp; stock</h1>
+        <span style="color: #5D6560; font-size: 15px">{{summary}}</span>
+      </div>
+      <div style="display: flex; gap: 10px"><button type="button" class="btn btn-ghost">+ Add category</button><button type="button" class="btn btn-dark">+ Add dish</button></div>
+    </header>
+    <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center">
+      <sc-for list="{{tabs}}" as="t" hint-placeholder-count="4"><button type="button" class="{{t.cls}}" onClick="{{t.pick}}">{{t.label}}</button></sc-for>
+      <input type="search" aria-label="Search dishes" placeholder="Search dishes" value="{{q}}" onInput="{{onQ}}" style="margin-left: auto; min-height: 42px; border-radius: 999px; border: 1.5px solid #D6DCD8; padding: 0 16px; font-family: 'Outfit', sans-serif; font-size: 15px; min-width: 220px">
+    </div>
+    <div class="card" style="overflow-x: auto">
+      <div style="min-width: 820px">
+        <div class="head"><span>Dish</span><span>Category</span><span>Price (₹)</span><span>Add-ons</span><span>In stock</span></div>
+        <sc-for list="{{items}}" as="it" hint-placeholder-count="6">
+          <div class="{{it.cls}}" style="animation-delay: {{it.delay}}">
+            <span style="display: flex; align-items: center; gap: 12px"><span class="thumb"><img src="{{it.img}}" alt=""></span><span style="display: flex; flex-direction: column; gap: 2px"><span style="display: flex; align-items: center; gap: 8px"><span class="{{it.vegClass}}"><i></i></span><b>{{it.name}}</b></span><span style="font-size: 13px; color: #5D6560">{{it.desc}}</span></span></span>
+            <span>{{it.cat}}</span>
+            <input class="price" aria-label="Price of {{it.name}}" value="{{it.price}}" onChange="{{it.setPrice}}">
+            <span style="font-size: 14px; color: #5D6560">{{it.addons}}</span>
+            <button type="button" class="{{it.swCls}}" aria-label="{{it.name}} in stock" aria-pressed="{{it.stockAttr}}" onClick="{{it.toggle}}"><span></span></button>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    <p style="margin: 0; font-size: 13px; color: #5D6560">Sold-out dishes are hidden from customers until you switch them back on. Orders already placed keep the price the customer paid.</p>
+  </main>
+  <sc-if value="{{toastOn}}" hint-placeholder-val="{{ false }}">
+    <div role="status" style="position: fixed; left: 50%; bottom: 28px; background: #111311; color: #fff; padding: 14px 22px; border-radius: 999px; font-weight: 700; box-shadow: 0 12px 30px rgba(0,0,0,.25); animation: toast 2.2s both; z-index: 60">{{toast}}</div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":960}}'>
+const IMG = { biryani: '/_blob/2b93675217b8cf367d18aed2a6f9a309', north: '/_blob/55f3e1023ccff0a1700822ff8d287727', south: '/_blob/216d34ef9a27c2647e07f72278a35947', desserts: '/_blob/100d63858d67bb12acb52423c7f1c7aa' };
+class Component extends DCLogic {
+  constructor(p) {
+    super(p);
+    this.state = { tab: 'All', q: '', toast: '', items: [
+      { id: 501, name: 'Chicken Dum Biryani', desc: 'Slow-cooked basmati with tender chicken', cat: 'Biryani', price: 320, veg: false, stock: true, addons: 'Extra Raita ₹30 · Extra Chicken Piece ₹90', img: IMG.biryani },
+      { id: 502, name: 'Mutton Biryani', desc: 'Hyderabadi style mutton biryani', cat: 'Biryani', price: 420, veg: false, stock: true, addons: 'None', img: IMG.north },
+      { id: 503, name: 'Veg Biryani', desc: 'Mixed vegetables and basmati rice', cat: 'Biryani', price: 240, veg: true, stock: true, addons: 'None', img: IMG.biryani },
+      { id: 504, name: 'Chicken 65', desc: 'Spicy deep-fried chicken', cat: 'Starters', price: 260, veg: false, stock: true, addons: 'None', img: IMG.south },
+      { id: 505, name: 'Paneer 65', desc: 'Spicy fried paneer cubes', cat: 'Starters', price: 230, veg: true, stock: false, addons: 'None', img: IMG.south },
+      { id: 506, name: 'Gulab Jamun (2 pcs)', desc: 'Warm and soft', cat: 'Desserts', price: 90, veg: true, stock: true, addons: 'None', img: IMG.desserts }
+    ] };
+  }
+  flash(msg) { clearTimeout(this.tt); this.setState({ toast: msg }); this.tt = setTimeout(() => this.setState({ toast: '' }), 2200); }
+  patch(id, p) { this.setState({ items: this.state.items.map((x) => x.id === id ? { ...x, ...p } : x) }); }
+  renderVals() {
+    const s = this.state, q = s.q.trim().toLowerCase();
+    const list = s.items.filter((x) => (s.tab === 'All' || x.cat === s.tab) && (!q || x.name.toLowerCase().includes(q)));
+    const count = (c) => s.items.filter((x) => c === 'All' || x.cat === c).length;
+    const off = s.items.filter((x) => !x.stock).length;
+    return {
+      q: s.q, onQ: (e) => this.setState({ q: e.target.value }),
+      summary: off ? `${s.items.length} dishes · ${off} sold out today` : `${s.items.length} dishes · everything in stock`,
+      tabs: ['All', 'Biryani', 'Starters', 'Desserts'].map((t) => ({ label: `${t} (${count(t)})`, cls: s.tab === t ? 'tab on' : 'tab', pick: () => this.setState({ tab: t }) })),
+      items: list.map((x, i) => ({ ...x, delay: i * 0.05 + 's', cls: x.stock ? 'dish' : 'dish off', vegClass: x.veg ? 'veg' : 'veg nv',
+        swCls: x.stock ? 'sw on' : 'sw', stockAttr: x.stock ? 'true' : 'false',
+        toggle: () => { this.patch(x.id, { stock: !x.stock }); this.flash(x.stock ? `${x.name} marked sold out` : `${x.name} is back in stock`); },
+        setPrice: (e) => { const v = parseInt(e.target.value, 10); if (v > 0) { this.patch(x.id, { price: v }); this.flash(`Price saved: ${x.name} ₹${v}`); } } })),
+      toastOn: !!s.toast, toast: s.toast
+    };
+  }
+}
+</script>
+</body>
+</html>

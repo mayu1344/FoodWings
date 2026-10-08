@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>My orders and rating</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body{margin:0;font-family:'Outfit',sans-serif;color:#111311;background:#F4F7F5}
+a{color:#0E7A3C}a:hover{color:#095A2C}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes starPop{0%{transform:scale(1)}50%{transform:scale(1.3) rotate(-8deg)}100%{transform:scale(1)}}
+@keyframes draw{to{stroke-dashoffset:0}}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 18px;border-radius:999px;font-family:'Outfit',sans-serif;font-weight:700;font-size:15px;border:0;text-decoration:none;box-sizing:border-box;transition:transform .15s}
+.btn:hover{transform:translateY(-2px)}
+.btn-green{background:#0E8A42;color:#fff}.btn-green:hover{color:#fff}
+.btn-ghost{background:#fff;color:#111311;border:1.5px solid #D6DCD8}.btn-ghost:hover{color:#111311}
+.btn-dark{background:#111311;color:#fff}.btn-dark:hover{color:#fff}
+.card{background:#fff;border-radius:24px;box-shadow:0 1px 2px rgba(17,19,17,.06),0 10px 28px rgba(17,19,17,.06)}
+.ord{animation:fadeUp .45s both;transition:transform .2s,box-shadow .2s}
+.ord:hover{transform:translateY(-3px);box-shadow:0 2px 4px rgba(17,19,17,.08),0 18px 36px rgba(17,19,17,.12)}
+.ord.sel{outline:2px solid #13A04F}
+.badge{display:inline-flex;padding:4px 10px;border-radius:999px;font-weight:700;font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+.star{width:48px;height:48px;border-radius:14px;border:1.5px solid #D6DCD8;background:#fff;font-size:24px;color:#C9D1CC;transition:background .2s,color .2s,border .2s}
+.star:hover{border-color:#13A04F}
+.star.on{background:#13A04F;border-color:#13A04F;color:#fff;animation:starPop .35s}
+.tab{min-height:44px;padding:0 18px;border-radius:999px;border:0;background:transparent;font-family:'Outfit',sans-serif;font-weight:700;font-size:15px;color:#5D6560;transition:all .2s}
+.tab.on{background:#111311;color:#fff}
+.thumb{width:84px;height:84px;border-radius:18px;overflow:hidden;flex:none}.thumb img{width:100%;height:100%;object-fit:cover}
+.gray img{filter:grayscale(1)}
+.chip{min-height:38px;padding:0 14px;border-radius:999px;border:1.5px solid #D6DCD8;background:#fff;font-family:'Outfit',sans-serif;font-size:14px;font-weight:600;transition:all .2s}
+.chip.on{background:#E7F6EC;border-color:#0E8A42;color:#0E7A3C}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div style="min-height: 940px">
+  <header style="background: #13A04F; padding: 14px 24px">
+    <div style="max-width: 1280px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between">
+      <a href="CustomerHome.dc.html" style="display: flex; align-items: center; gap: 10px; color: #fff; text-decoration: none"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg><span style="font-weight: 800; font-size: 26px">Foodu</span></a>
+      <span style="color: #fff; font-weight: 700; font-size: 16px">Ravi Kumar · +91 98450 11111</span>
+    </div>
+  </header>
+  <main style="max-width: 1280px; margin: 0 auto; padding: 28px 24px 48px; display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
+    <section style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px">
+        <h1 style="margin: 0; font-weight: 800; font-size: 34px">My account</h1>
+        <div style="display: flex; gap: 4px; background: #fff; border-radius: 999px; padding: 4px; box-shadow: 0 1px 2px rgba(17,19,17,.06)">
+          <sc-for list="{{tabs}}" as="t" hint-placeholder-count="3"><button type="button" class="{{t.cls}}" onClick="{{t.pick}}">{{t.label}}</button></sc-for>
+        </div>
+      </div>
+      <sc-if value="{{showOrders}}" hint-placeholder-val="{{ true }}">
+        <sc-for list="{{orders}}" as="o" hint-placeholder-count="3">
+          <article class="{{o.cls}}" style="padding: 18px 20px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; animation-delay: {{o.delay}}">
+            <span class="{{o.thumbCls}}"><img src="{{o.img}}" alt=""></span>
+            <div style="flex: 1 1 280px; display: flex; flex-direction: column; gap: 6px">
+              <span style="display: flex; gap: 10px; align-items: center"><b style="font-size: 19px">{{o.rest}}</b><span class="badge" style="background: {{o.bg}}; color: {{o.fg}}">{{o.status}}</span></span>
+              <span style="font-size: 15px; color: #5D6560">{{o.line}}</span>
+              <sc-if value="{{o.rated}}" hint-placeholder-val="{{ false }}"><span style="font-size: 14px; color: #0E7A3C; font-weight: 700">You rated ★ {{o.ratedText}}</span></sc-if>
+            </div>
+            <div style="display: flex; gap: 10px">
+              <sc-if value="{{o.live}}" hint-placeholder-val="{{ false }}"><a class="btn btn-dark" href="CustomerTracking.dc.html">Track order</a></sc-if>
+              <sc-if value="{{o.past}}" hint-placeholder-val="{{ false }}"><a class="btn btn-ghost" href="CustomerMenu.dc.html">Reorder</a></sc-if>
+              <sc-if value="{{o.canRate}}" hint-placeholder-val="{{ false }}"><button type="button" class="btn btn-green" onClick="{{o.rate}}">Rate</button></sc-if>
+            </div>
+          </article>
+        </sc-for>
+      </sc-if>
+      <sc-if value="{{showAddr}}" hint-placeholder-val="{{ false }}">
+        <div class="card ord" style="padding: 22px; display: flex; flex-direction: column; gap: 6px"><b style="font-size: 18px">Home · default</b><span style="color: #5D6560">221, 9th Cross, Jayanagar 3rd Block · Near Cool Joint · Bengaluru</span></div>
+        <div class="card ord" style="padding: 22px; display: flex; flex-direction: column; gap: 6px; animation-delay: .06s"><b style="font-size: 18px">Work</b><span style="color: #5D6560">Prestige Tech Park, Koramangala · Gate 2 · Bengaluru</span></div>
+        <button type="button" class="btn btn-ghost" style="align-self: flex-start">+ Add a new address</button>
+      </sc-if>
+      <sc-if value="{{showCards}}" hint-placeholder-val="{{ false }}">
+        <div class="card ord" style="padding: 22px; display: flex; align-items: center; gap: 16px">
+          <span style="width: 64px; height: 42px; border-radius: 8px; background: linear-gradient(135deg,#111311,#13A04F); color: #fff; font-weight: 800; font-size: 13px; display: flex; align-items: center; justify-content: center">VISA</span>
+          <span style="flex: 1; display: flex; flex-direction: column"><b>VISA •••• 1111</b><span style="color: #5D6560; font-size: 14px">Expires 12/2030 · only a secure token is stored</span></span>
+          <button type="button" class="btn btn-ghost">Remove</button>
+        </div>
+      </sc-if>
+    </section>
+
+    <aside id="rate" class="card" style="flex: 1 1 320px; max-width: 420px; overflow: hidden; display: flex; flex-direction: column">
+      <div style="height: 150px; position: relative"><img src="{{img.biryani}}" alt="" style="width: 100%; height: 100%; object-fit: cover"><div style="position: absolute; inset: 0; background: linear-gradient(transparent 30%, rgba(0,0,0,.6))"></div><b style="position: absolute; left: 20px; bottom: 14px; color: #fff; font-size: 22px">Rate order #9001</b></div>
+      <sc-if value="{{notSent}}" hint-placeholder-val="{{ true }}">
+        <div style="padding: 24px 28px 28px; display: flex; flex-direction: column; gap: 18px">
+          <div style="display: flex; flex-direction: column; gap: 10px">
+            <span style="font-weight: 700; font-size: 16px">How was the food? <span style="color: #0E7A3C">{{foodWord}}</span></span>
+            <div style="display: flex; gap: 8px"><sc-for list="{{foodStars}}" as="st" hint-placeholder-count="5"><button type="button" class="{{st.cls}}" aria-label="{{st.n}} stars" onClick="{{st.set}}">★</button></sc-for></div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 10px">
+            <span style="font-weight: 700; font-size: 16px">How was the delivery by Suresh? <span style="color: #0E7A3C">{{delWord}}</span></span>
+            <div style="display: flex; gap: 8px"><sc-for list="{{delStars}}" as="st" hint-placeholder-count="5"><button type="button" class="{{st.cls}}" aria-label="{{st.n}} stars" onClick="{{st.set}}">★</button></sc-for></div>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px"><sc-for list="{{chips}}" as="c" hint-placeholder-count="4"><button type="button" class="{{c.cls}}" onClick="{{c.toggle}}">{{c.label}}</button></sc-for></div>
+          <label style="display: flex; flex-direction: column; gap: 8px"><span style="font-weight: 700; font-size: 16px">Comment (optional)</span>
+            <textarea rows="3" style="border: 1.5px solid #D6DCD8; border-radius: 14px; padding: 12px 14px; font-family: 'Outfit', sans-serif; font-size: 15px">Biryani was hot and tasty.</textarea>
+          </label>
+          <button type="button" class="btn btn-green" style="min-height: 52px; font-size: 17px" onClick="{{submit}}">Submit rating</button>
+        </div>
+      </sc-if>
+      <sc-if value="{{sent}}" hint-placeholder-val="{{ false }}">
+        <div style="padding: 36px 28px; display: flex; flex-direction: column; gap: 12px; align-items: center; text-align: center; animation: fadeUp .4s both">
+          <svg width="76" height="76" viewBox="0 0 52 52"><circle cx="26" cy="26" r="24" fill="#13A04F"></circle><path d="M15 27l7 7 15-15" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="40" stroke-dashoffset="40" style="animation: draw .5s .1s forwards"></path></svg>
+          <b style="font-size: 22px">Thanks for rating!</b>
+          <span style="color: #5D6560">Your feedback helps Spice Route and Suresh improve.</span>
+        </div>
+      </sc-if>
+    </aside>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":940}}'>
+const IMG = { biryani: '/_blob/2b93675217b8cf367d18aed2a6f9a309', dosa: '/_blob/aad2de03c325c740dd455d9f530c9e3a' };
+const WORDS = ['', 'Poor', 'Okay', 'Good', 'Great', 'Loved it'];
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { tab: 'orders', food: 5, del: 4, chips: { 'Hot & fresh': true }, sent: false }; }
+  renderVals() {
+    const s = this.state;
+    const stars = (key, val) => [1, 2, 3, 4, 5].map((n) => ({ n, cls: n <= val ? 'star on' : 'star', set: () => this.setState({ [key]: n }) }));
+    const orders = [
+      { rest: 'Spice Route Biryani House', status: 'Preparing', bg: '#FFF4D6', fg: '#7A4B00', line: '#9005 · Today, 7:58 PM · Chicken Dum Biryani, Gulab Jamun · ₹422', img: IMG.biryani, live: true },
+      { rest: 'Spice Route Biryani House', status: 'Delivered', bg: '#E7F6EC', fg: '#0E7A3C', line: '#9001 · Yesterday · Chicken Dum Biryani + Extra Raita, Gulab Jamun · ₹497', img: IMG.biryani, past: true, canRate: !s.sent, rated: s.sent, sel: true },
+      { rest: 'Udupi Grand Veg', status: 'Cancelled', bg: '#FDECEA', fg: '#8E1F16', line: 'Masala Dosa, Filter Coffee · Refund issued to your card', img: IMG.dosa, past: true, gray: true }
+    ];
+    return {
+      img: IMG,
+      tabs: [['orders', 'Orders'], ['addr', 'Addresses'], ['cards', 'Saved cards']].map(([id, label]) => ({ label, cls: s.tab === id ? 'tab on' : 'tab', pick: () => this.setState({ tab: id }) })),
+      showOrders: s.tab === 'orders', showAddr: s.tab === 'addr', showCards: s.tab === 'cards',
+      orders: orders.map((o, i) => ({ ...o, live: !!o.live, past: !!o.past, canRate: !!o.canRate, rated: !!o.rated, ratedText: `${s.food}/5`, delay: i * 0.07 + 's',
+        cls: o.sel && !s.sent ? 'card ord sel' : 'card ord', thumbCls: o.gray ? 'thumb gray' : 'thumb', rate: () => this.setState({ sent: false }) })),
+      foodStars: stars('food', s.food), delStars: stars('del', s.del), foodWord: WORDS[s.food], delWord: WORDS[s.del],
+      chips: ['Hot & fresh', 'Great taste', 'Good packaging', 'On time'].map((c) => ({ label: c, cls: s.chips[c] ? 'chip on' : 'chip', toggle: () => this.setState({ chips: { ...s.chips, [c]: !s.chips[c] } }) })),
+      notSent: !s.sent, sent: s.sent, submit: () => this.setState({ sent: true })
+    };
+  }
+}
+</script>
+</body>
+</html>

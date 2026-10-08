@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Rider: deliver to the customer</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body{margin:0;font-family:'Outfit',sans-serif;color:#111311}
+a{color:#0E7A3C}a:hover{color:#095A2C}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(17,19,17,.45)}100%{box-shadow:0 0 0 18px rgba(17,19,17,0)}}
+@keyframes ping{0%{transform:scale(.6);opacity:.8}100%{transform:scale(2.3);opacity:0}}
+@keyframes up{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
+@keyframes pop{0%{transform:scale(.5);opacity:0}70%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}
+@keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+.map{position:relative;background-color:#E9EFEB;background-image:linear-gradient(#DCE4DF 3px,transparent 3px),linear-gradient(90deg,#DCE4DF 3px,transparent 3px),linear-gradient(#E2E9E4 1px,transparent 1px),linear-gradient(90deg,#E2E9E4 1px,transparent 1px);background-size:120px 120px,120px 120px,30px 30px,30px 30px}
+.pin{position:absolute;width:40px;height:40px;margin:-20px 0 0 -20px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:14px;border:3px solid #fff;box-shadow:0 4px 10px rgba(0,0,0,.25);overflow:hidden}
+.pin img{width:100%;height:100%;object-fit:cover}
+.rider{animation:pulse 1.6s infinite;z-index:2;background:#111311}
+.ping{position:absolute;width:40px;height:40px;margin:-20px 0 0 -20px;border-radius:50%;background:#13A04F;animation:ping 1.8s infinite}
+.seg{position:absolute;background:#111311;border-radius:4px}.seg i{position:absolute;inset:1px;border-radius:3px;background:#FFD60A}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;min-height:54px;border-radius:999px;border:0;font-family:'Outfit',sans-serif;font-weight:800;font-size:17px;text-decoration:none;transition:transform .15s,opacity .2s}
+.btn:active{transform:scale(.97)}
+.btn[disabled]{opacity:.45}
+.sw{width:48px;height:28px;border-radius:999px;border:0;position:relative;background:#C9D1CC;transition:background .25s}
+.sw span{position:absolute;left:3px;top:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:left .25s}
+.sw.on{background:#E09F00}.sw.on span{left:23px}
+.cash{animation:up .3s both}
+.bad{animation:shake .35s;border-color:#C0392B!important}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; display: flex; flex-direction: column; overflow: hidden; background: #F4F7F5; position: relative">
+  <header style="background: #13A04F; color: #fff; padding: 18px; display: flex; align-items: center; justify-content: space-between">
+    <span style="display: flex; flex-direction: column"><span style="font-size: 12px; letter-spacing: .12em; color: #DFF7E8">STEP 2 OF 2</span><b style="font-size: 20px">Deliver to the customer</b></span>
+    <span style="font-weight: 800; font-size: 18px; background: #111311; padding: 8px 12px; border-radius: 12px">{{eta}}</span>
+  </header>
+  <section class="map" aria-label="Route from the restaurant to the customer" style="flex: 1">
+    <div class="seg" style="left: 24%; top: calc(30% - 4px); width: 48%; height: 8px"><i></i></div>
+    <div class="seg" style="left: calc(72% - 4px); top: 30%; width: 8px; height: 26%"><i></i></div>
+    <div class="pin" style="left: 24%; top: 30%; background: #D62839"><img src="{{img.biryani}}" alt="Restaurant"></div>
+    <div class="ping" style="left: 72%; top: 56%"></div>
+    <div class="pin" style="left: 72%; top: 56%; background: #0E8A42">H</div>
+    <div class="pin rider" style="left: {{rx}}; top: {{ry}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="17" r="3"></circle><circle cx="18" cy="17" r="3"></circle><path d="M6 17l4-7h5l3 7"></path></svg></div>
+  </section>
+  <section style="background: #fff; border-radius: 28px 28px 0 0; margin-top: -24px; position: relative; padding: 18px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 -8px 24px rgba(0,0,0,.08); animation: up .45s both">
+    <div style="display: flex; gap: 10px; align-items: flex-start">
+      <span style="flex: 1; display: flex; flex-direction: column; gap: 2px"><b style="font-size: 18px">Ravi K. · Home</b><span style="font-size: 14px; color: #5D6560">221, 9th Cross, Jayanagar 3rd Block<br>Landmark: Near Cool Joint</span></span>
+      <a class="btn" href="tel:+919845011111" style="min-height: 44px; padding: 0 14px; background: #fff; border: 1.5px solid #D6DCD8; color: #111311; font-size: 15px">Call</a>
+      <a class="btn" href="https://www.google.com/maps" style="min-height: 44px; padding: 0 14px; background: #111311; color: #fff; font-size: 15px">Navigate</a>
+    </div>
+    <div style="display: flex; align-items: center; justify-content: space-between; background: #F4F7F5; border-radius: 14px; padding: 10px 14px">
+      <span style="font-size: 14px; font-weight: 600">{{payLine}}</span>
+      <button type="button" class="{{codCls}}" aria-label="Preview as cash on delivery order" aria-pressed="{{codAttr}}" onClick="{{toggleCod}}"><span></span></button>
+    </div>
+    <sc-if value="{{cod}}" hint-placeholder-val="{{ false }}">
+      <label class="cash" style="display: flex; flex-direction: column; gap: 6px">
+        <span style="font-size: 13px; font-weight: 700; color: #7A4B00">COLLECT ₹422 IN CASH</span>
+        <input class="{{cashCls}}" inputmode="numeric" placeholder="Cash collected (₹)" value="{{cash}}" onInput="{{onCash}}" style="min-height: 48px; border: 1.5px solid #D6DCD8; border-radius: 12px; padding: 0 12px; font-family: 'Outfit', sans-serif; font-size: 16px; font-weight: 700">
+        <span style="font-size: 12px; color: {{hintColor}}">{{cashHint}}</span>
+      </label>
+    </sc-if>
+    <button type="button" class="btn" style="background: #0E8A42; color: #fff" disabled="{{cantDeliver}}" onClick="{{deliver}}">{{deliverText}}</button>
+  </section>
+
+  <sc-if value="{{done}}" hint-placeholder-val="{{ false }}">
+    <div style="position: absolute; inset: 0; background: #13A04F; color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 28px; text-align: center; animation: up .35s both">
+      <svg width="96" height="96" viewBox="0 0 52 52" style="animation: pop .5s both"><circle cx="26" cy="26" r="24" fill="#fff"></circle><path d="M15 27l7 7 15-15" fill="none" stroke="#13A04F" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      <b style="font-size: 28px">Delivered!</b>
+      <span style="font-size: 16px; color: #DFF7E8">Order #9005 handed to Ravi</span>
+      <span style="font-weight: 800; font-size: 48px; animation: pop .5s .2s both">+₹{{earned}}</span>
+      <a class="btn" href="RiderEarnings.dc.html" style="background: #111311; color: #fff; align-self: stretch">See earnings</a>
+      <a class="btn" href="RiderHome.dc.html" style="background: rgba(255,255,255,.18); color: #fff; align-self: stretch">Back online for next order</a>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+const IMG = { biryani: '/_blob/2b93675217b8cf367d18aed2a6f9a309' };
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { p: 0, cod: false, cash: '', done: false, earned: 0 }; }
+  componentDidMount() {
+    this.t = setInterval(() => {
+      const s = this.state;
+      if (s.p < 1) this.setState({ p: Math.min(1, s.p + 0.008) });
+      if (s.done && s.earned < 35) this.setState({ earned: Math.min(35, s.earned + 3) });
+    }, 100);
+  }
+  componentWillUnmount() { clearInterval(this.t); }
+  renderVals() {
+    const s = this.state; const p = s.p;
+    let x = 24, y = 30;
+    if (p < 0.65) x = 24 + (p / 0.65) * 48; else { x = 72; y = 30 + ((p - 0.65) / 0.35) * 26; }
+    const arrived = p >= 1;
+    const cashOk = !s.cod || parseInt(s.cash, 10) === 422;
+    const cashWrong = s.cod && s.cash.length >= 3 && !cashOk;
+    return {
+      img: IMG, rx: x + '%', ry: y + '%', eta: arrived ? 'Arrived' : `${Math.ceil((1 - p) * 4)} min`,
+      payLine: s.cod ? 'Cash on delivery' : 'Paid online · nothing to collect',
+      cod: s.cod, codAttr: s.cod ? 'true' : 'false', codCls: s.cod ? 'sw on' : 'sw', toggleCod: () => this.setState({ cod: !s.cod, cash: '' }),
+      cash: s.cash, onCash: (e) => this.setState({ cash: e.target.value.replace(/\D/g, '').slice(0, 5) }),
+      cashCls: cashWrong ? 'bad' : '', cashHint: cashWrong ? 'Amount must match the bill: ₹422' : 'Enter exactly what you collected',
+      hintColor: cashWrong ? '#8E1F16' : '#5D6560',
+      cantDeliver: !arrived || !cashOk, deliverText: arrived ? 'Mark as delivered' : 'Reach the customer to finish',
+      deliver: () => this.setState({ done: true }), done: s.done, earned: s.earned
+    };
+  }
+}
+</script>
+</body>
+</html>

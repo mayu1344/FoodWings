@@ -1,92 +1,115 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#0a0a0c">
-  <meta name="description" content="FoodWings - Complete Food Delivery Ecosystem (Customer, Restaurant Partner & Rider Apps)">
-  <title>FoodWings — Live Food Delivery Platform</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=Manrope:wght@500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap">
-  <!-- Map library (real street maps) -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-  <link rel="stylesheet" href="css/styles.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Foodu – food, fast</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="css/foodu.css">
+<style>
+.hero{position:relative;z-index:4;background:radial-gradient(120% 90% at 50% 0%,#1DB75E 0%,#13A04F 45%,#0E8A42 100%);color:#fff}
+.hero nav{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 0;flex-wrap:wrap}
+.hero nav .links{display:flex;gap:22px;align-items:center;flex-wrap:wrap}
+.hero nav .links a{color:#fff;text-decoration:none;font-weight:600}
+.hero nav .links a:hover{text-decoration:underline}
+.hero .inner{position:relative;z-index:2;text-align:center;padding:60px 0 120px;max-width:760px;margin:0 auto}
+.hero h1{font-size:clamp(38px,6vw,64px);font-weight:800;line-height:1.05;margin:18px 0 14px}
+.hero p.lead{font-size:19px;color:#E1F7EA;margin:0 0 26px}
+.offer{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border-radius:999px;font-weight:700;font-size:14px;border:1px solid rgba(255,255,255,.35)}
+.offer span{display:inline-block;animation:fadeUp .4s both}
+.search{position:relative;max-width:560px;margin:0 auto}
+.search .inp{min-height:60px;border-radius:999px;padding:0 24px 0 54px;border:0;font-size:17px;box-shadow:0 18px 40px rgba(0,0,0,.18)}
+.search svg{position:absolute;left:22px;top:20px}
+.sugg{position:absolute;left:0;right:0;top:68px;background:#fff;border-radius:22px;box-shadow:var(--shadow-up);overflow:hidden;text-align:left;color:var(--ink);z-index:5;animation:sheet .25s both}
+.sugg a{display:flex;align-items:center;gap:12px;padding:10px 16px;text-decoration:none;color:var(--ink);font-weight:600}
+.sugg a:hover,.sugg a.on{background:var(--green-tint)}
+.corners{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.corner{position:absolute;width:min(30vw,340px);aspect-ratio:1;border-radius:40px;overflow:hidden;box-shadow:0 30px 60px rgba(0,0,0,.25);z-index:1}
+.corner img{width:100%;height:100%;object-fit:cover}
+.corner.l{left:-60px;bottom:-40px}.corner.r{right:-60px;top:120px;animation-delay:-3s}
+@media (max-width:900px){.corner{display:none}}
+.apps{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22px;margin-top:-70px;position:relative;z-index:3}
+.app{overflow:hidden;text-decoration:none;color:var(--ink)}
+.app .photo{height:190px}
+.app .b{padding:20px 22px 24px;display:flex;flex-direction:column;gap:8px}
+.app h3{font-size:24px;font-weight:800}
+.app .go{font-weight:700;color:var(--green-text)}
+section.blk{padding:56px 0 0}
+section.blk h2{font-size:32px;font-weight:800;margin-bottom:22px}
+.mind{display:flex;gap:22px;overflow-x:auto;padding:4px 4px 14px;scroll-snap-type:x mandatory}
+.mind button{border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:10px;font-weight:700;font-size:15px;color:var(--ink);scroll-snap-align:start;flex:none}
+.mind .photo{width:120px;height:120px;border-radius:50%;border:4px solid transparent;transition:border-color .25s,transform .25s}
+.mind button:hover .photo{transform:translateY(-4px)}
+.mind button.on .photo{border-color:var(--green)}
+.mind button.on{color:var(--green-text)}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+.step{padding:24px;transition:background .4s,color .4s,transform .4s}
+.step b.n{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--green-tint);color:var(--green-text);font-size:18px;margin-bottom:14px;transition:all .4s}
+.step.on{background:var(--ink);color:#fff;transform:translateY(-6px)}
+.step.on b.n{background:var(--green);color:#fff}
+.step.on .muted{color:#C9D1CC}
+footer{margin-top:70px;padding:30px 0;background:var(--ink);color:#C9D1CC}
+footer a{color:#fff}
+</style>
 </head>
 <body>
-  <div class="stagepage">
-    <div class="announce">
-      <span class="live">Live Platform</span>
-      <span>Three interconnected apps running on a single reactive state &amp; shared database.</span>
-      <span class="spacer"></span>
-      <button data-page="reset">Reset demo data ↺</button>
-    </div>
-    <header class="topnav">
-      <div class="brandmark"><span id="topLogo"></span><b>FoodWings</b><span>Customer · Partner · Rider</span></div>
-      <nav class="picker" aria-label="Choose layout view">
-        <button data-page="pick" data-app="all" aria-pressed="true">⚡ All 3 Apps</button>
-        <button data-page="pick" data-app="customer" aria-pressed="false">🍔 Customer</button>
-        <button data-page="pick" data-app="restaurant" aria-pressed="false">🍳 Kitchen</button>
-        <button data-page="pick" data-app="rider" aria-pressed="false">🛵 Rider</button>
-      </nav>
-      <div style="display:flex;align-items:center;gap:10px;">
-        <a href="login.html" class="nav-auth-btn" title="Sign In or Register a new account">
-          <span>👤</span> Sign In / Register
-        </a>
-        <button class="modebadge" data-page="mode" title="Switch between demo data and the live API">Demo data</button>
+<header class="hero">
+  <div class="wrap">
+    <nav>
+      <a class="brand" href="index.html"><span class="logo" id="logo"></span>Foodu</a>
+      <div class="links">
+        <a href="customer.html">Order food</a>
+        <a href="restaurant.html">Kitchen Portal</a>
+        <a href="rider.html">Ride with us</a>
+        <a href="admin.html">Admin</a>
+        <a class="btn btn-dark sm" href="login.html">Sign in</a>
       </div>
-    </header>
-    <div class="stage">
-      <section class="hero">
-        <div>
-          <span class="kicker">FoodWings Unified Ecosystem</span>
-          <h1>Hungry now. <em>Delivered fast.</em></h1>
-          <p>Order in the customer app, prepare in the kitchen portal, and track delivery in the rider app with synchronized real-time updates.</p>
-        </div>
-        <div class="flow" aria-label="Order flow">
-          <span><b>1</b> Order &amp; Pay</span>
-          <span><b>2</b> Kitchen Prep</span>
-          <span><b>3</b> Rider Pickup</span>
-          <span><b>4</b> Doorstep Delivery</span>
-        </div>
-      </section>
-      <section class="device active" data-app="customer">
-        <div class="devlabel"><b><i>01</i> Customer App</b><a href="customer.html" target="_blank" rel="noopener">Open alone ↗</a></div>
-        <div class="frame" id="app-customer"></div>
-      </section>
-      <section class="device tablet" data-app="restaurant">
-        <div class="devlabel"><b><i>02</i> Kitchen Partner Portal</b><a href="restaurant.html" target="_blank" rel="noopener">Open alone ↗</a></div>
-        <div class="frame" id="app-restaurant"></div>
-      </section>
-      <section class="device" data-app="rider">
-        <div class="devlabel"><b><i>03</i> Rider Partner HUD</b><a href="rider.html" target="_blank" rel="noopener">Open alone ↗</a></div>
-        <div class="frame" id="app-rider"></div>
-      </section>
-    </div>
-    <aside id="inspector"></aside>
+    </nav>
   </div>
-  <script src="js/core/config.js"></script>
-  <script src="js/core/ui.js"></script>
-  <script src="js/core/map.js"></script>
-  <script src="js/core/operations.js"></script>
-  <script src="js/core/mock-server.js"></script>
-  <script src="js/core/api.js"></script>
-  <script src="js/core/gateway-sdk.js"></script>
-  <script src="js/core/shell.js"></script>
-  <script src="js/core/inspector.js"></script>
-  <script src="js/core/page.js"></script>
-  <script src="js/screens/login.js"></script>
-  <script src="js/screens/customer.js"></script>
-  <script src="js/screens/restaurant.js"></script>
-  <script src="js/screens/rider.js"></script>
-  <script>
-    App.initPage();
-    document.getElementById("topLogo").innerHTML = App.logo(36);
-    App.mountApp(document.getElementById("app-customer"), "customer");
-    App.mountApp(document.getElementById("app-restaurant"), "restaurant");
-    App.mountApp(document.getElementById("app-rider"), "rider");
-    App.mountInspector(document.getElementById("inspector"));
-  </script>
+  <div class="corners"><div class="corner l float"><img src="img/hero-groceries.jpg" alt="Fresh groceries"></div>
+  <div class="corner r float"><img src="img/hero-sushi.jpg" alt="Plated food"></div></div>
+  <div class="inner wrap">
+    <span class="offer shine" id="offer"><span>Free delivery on your first order</span></span>
+    <h1 class="up">Hot food from the best<br>kitchens in your area</h1>
+    <p class="lead up" style="animation-delay:.08s">Order in a few taps. Track your rider live. Pay by card, UPI or cash.</p>
+    <div class="search up" style="animation-delay:.16s">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5D6560" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input class="inp" id="q" placeholder="Search for biryani, dosa, pizza…" autocomplete="off" aria-label="Search dishes">
+      <div class="sugg hide" id="sugg"></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="apps">
+    <a class="card lift app up" href="customer.html">
+      <div class="photo"><img src="img/north-indian.jpg" alt="Food delivery"></div>
+      <div class="b"><span class="chip" style="align-self:flex-start">Customers</span><h3>Food delivery</h3><span class="muted">Browse nearby restaurants, fill your cart and track the rider to your door.</span><span class="go">Order now →</span></div>
+    </a>
+    <a class="card lift app up" style="animation-delay:.08s" href="restaurant.html">
+      <div class="photo"><img src="img/restaurant-1.jpg" alt="Restaurant kitchen"></div>
+      <div class="b"><span class="chip" style="align-self:flex-start">Restaurants</span><h3>Kitchen Portal</h3><span class="muted">Accept orders, mark them ready, manage stock and prices, see payouts.</span><span class="go">Open portal →</span></div>
+    </a>
+    <a class="card lift app up" style="animation-delay:.16s" href="rider.html">
+      <div class="photo"><img src="img/dineout.jpg" alt="City at night"></div>
+      <div class="b"><span class="chip" style="align-self:flex-start">Riders</span><h3>Rider HUD</h3><span class="muted">Go online, accept nearby trips, pick up and deliver, watch earnings grow.</span><span class="go">Start riding →</span></div>
+    </a>
+  </div>
+
+  <section class="blk">
+    <h2>What's on your mind?</h2>
+    <div class="mind" id="mind"></div>
+  </section>
+
+  <section class="blk">
+    <h2>How it works</h2>
+    <div class="steps" id="steps"></div>
+  </section>
+</main>
+<footer><div class="wrap row between wrapf"><span>© Foodu · FoodWings project</span><span><a href="/docs">API docs (Swagger)</a></span></div></footer>
+
+<script src="js/foodu.js"></script>
+<script src="js/landing.js"></script>
 </body>
 </html>

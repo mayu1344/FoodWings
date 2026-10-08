@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Kitchen Portal: onboarding and review</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body{margin:0;font-family:'Outfit',sans-serif;color:#111311;background:#F4F7F5}
+a{color:#0E7A3C}a:hover{color:#095A2C}
+.side a{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;border-radius:14px;color:#C9D1CC;text-decoration:none;font-weight:600;font-size:16px}
+.side a:hover{color:#fff;background:#1E221F}.side a.on{background:#13A04F;color:#fff}
+.side a.off{color:#7B847F}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 22px;border-radius:999px;font-family:'Outfit',sans-serif;font-weight:700;font-size:16px;border:0;text-decoration:none;box-sizing:border-box}
+.btn-dark{background:#111311;color:#fff}.btn-ghost{background:#fff;color:#111311;border:1.5px solid #D6DCD8}
+.card{background:#fff;border-radius:22px;box-shadow:0 1px 2px rgba(17,19,17,.06),0 8px 22px rgba(17,19,17,.06)}
+.inp{min-height:48px;width:100%;border:1.5px solid #D6DCD8;border-radius:12px;padding:0 12px;font-family:'Outfit',sans-serif;font-size:15px;font-weight:500;color:#111311;background:#fff;box-sizing:border-box}
+.lbl{font-weight:600;font-size:14px}.f{display:flex;flex-direction:column;gap:6px}
+.day{display:grid;grid-template-columns:110px 60px minmax(0,1fr) minmax(0,1fr);gap:10px;align-items:center;font-size:15px}
+.sw{width:46px;height:26px;border-radius:999px;border:0;position:relative;background:#C9D1CC;transition:background .25s}
+.sw span{position:absolute;left:3px;top:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:left .25s}
+.sw.on{background:#13A04F}.sw.on span{left:23px}
+.day.closed{opacity:.5}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(224,159,0,.5)}50%{box-shadow:0 0 0 8px rgba(224,159,0,0)}}
+.card{animation:fadeUp .45s both}
+.chk b.now{animation:pulse 1.8s infinite}
+.chk{display:flex;gap:10px;align-items:center;font-size:15px}
+.chk b{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;flex:none}
+.mappin{height:140px;border-radius:14px;background-color:#E9EFEB;background-image:linear-gradient(#DCE4DF 2px,transparent 2px),linear-gradient(90deg,#DCE4DF 2px,transparent 2px);background-size:40px 40px;display:flex;align-items:center;justify-content:center;color:#0E7A3C;font-weight:600;font-size:13px}
+</style>
+</helmet>
+<div style="min-height: 1100px; display: flex; flex-wrap: wrap">
+  <aside class="side" style="flex: 1 1 240px; max-width: 260px; background: #111311; padding: 24px 16px; display: flex; flex-direction: column; gap: 6px; box-sizing: border-box">
+    <div style="display: flex; align-items: center; gap: 10px; padding: 4px 8px 20px">
+      <span style="width: 40px; height: 40px; border-radius: 50%; background: #13A04F; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11h16a8 8 0 0 1-16 0z"></path><path d="M9 7c0-2 1-3 3-3"></path><path d="M14 8c1-2 3-2 4-1"></path></svg></span>
+      <span style="display: flex; flex-direction: column; color: #fff"><b style="font-size: 22px">Foodu</b><span style="font-size: 12px; letter-spacing: .12em; color: #9FE0B8">KITCHEN PORTAL</span></span>
+    </div>
+    <a class="off" href="KitchenOnboarding.dc.html">Live orders <span style="font-size: 12px">after approval</span></a>
+    <a href="KitchenMenu.dc.html">Menu &amp; stock</a>
+    <a class="off" href="KitchenOnboarding.dc.html">Payouts <span style="font-size: 12px">after approval</span></a>
+    <a class="on" href="KitchenOnboarding.dc.html">Restaurant profile</a>
+  </aside>
+  <main style="flex: 999 1 640px; min-width: 0; padding: 28px; display: flex; flex-direction: column; gap: 22px; box-sizing: border-box">
+    <section class="card" style="padding: 24px 28px; display: flex; flex-wrap: wrap; gap: 24px; align-items: center; background: #FFF8E6; box-shadow: none; border: 1.5px solid #F3D48A">
+      <div style="flex: 1 1 380px; display: flex; flex-direction: column; gap: 6px">
+        <span style="font-weight: 700; font-size: 13px; letter-spacing: .1em; color: #7A4B00">STATUS: PENDING REVIEW</span>
+        <h1 style="margin: 0; font-weight: 800; font-size: 30px">Nandini Tiffin Centre is under review</h1>
+        <span style="font-size: 15px; color: #5D4A1F">Our team checks your FSSAI licence and details. You can set up your menu meanwhile. Orders start once you are approved.</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px">
+        <span class="chk"><b style="background: #13A04F; color: #fff">✓</b>Account created</span>
+        <span class="chk"><b style="background: #13A04F; color: #fff">✓</b>Restaurant details sent</span>
+        <span class="chk"><b class="now" style="background: #E09F00; color: #fff">3</b>Approval by Foodu team</span>
+        <span class="chk" style="color: #7B847F"><b style="background: #E4E8E5">4</b>Go live and open</span>
+      </div>
+    </section>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 22px; align-items: flex-start">
+      <form class="card" style="flex: 1 1 420px; padding: 26px; display: flex; flex-direction: column; gap: 14px">
+        <h2 style="margin: 0; font-weight: 800; font-size: 22px">Restaurant details</h2>
+        <label class="f"><span class="lbl">Restaurant name</span><input class="inp" value="Nandini Tiffin Centre"></label>
+        <label class="f"><span class="lbl">Owner</span><input class="inp" value="Shivanand Hiremath" disabled style="background: #F4F7F5"></label>
+        <label class="f"><span class="lbl">Cuisines</span><input class="inp" value="South Indian"></label>
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+          <label class="f"><span class="lbl">FSSAI no.</span><input class="inp" value="11221333000104"></label>
+          <label class="f"><span class="lbl">GST no. (optional)</span><input class="inp" placeholder="Not added"></label>
+        </div>
+        <label class="f"><span class="lbl">Address</span><input class="inp" value="3rd Cross, JP Nagar 2nd Phase"></label>
+        <div class="mappin">Pinned: 12.9108, 77.5859</div>
+        <button type="button" class="btn btn-dark">Save changes</button>
+      </form>
+
+      <form class="card" style="flex: 1 1 420px; padding: 26px; display: flex; flex-direction: column; gap: 14px">
+        <h2 style="margin: 0; font-weight: 800; font-size: 22px">Opening hours</h2>
+        <div class="day" style="font-size: 12px; color: #5D6560; font-weight: 700; letter-spacing: .06em"><span>DAY</span><span>OPEN</span><span>FROM</span><span>TO</span></div>
+        <sc-for list="{{days}}" as="d" hint-placeholder-count="7">
+          <div class="{{d.rowCls}}"><b>{{d.name}}</b><button type="button" class="{{d.swCls}}" aria-label="Open on {{d.name}}" aria-pressed="{{d.onAttr}}" onClick="{{d.toggle}}"><span></span></button><input class="inp" aria-label="Opens" value="{{d.from}}" disabled="{{d.closed}}" onChange="{{d.setFrom}}"><input class="inp" aria-label="Closes" value="{{d.to}}" disabled="{{d.closed}}" onChange="{{d.setTo}}"></div>
+        </sc-for>
+        <button type="button" class="btn btn-ghost" onClick="{{copyMon}}">{{copyText}}</button>
+      </form>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1100}}'>
+const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { h: Object.fromEntries(DAYS.map((d) => [d, { on: d !== 'Sunday', from: '07:00', to: '21:00' }])), copied: false }; }
+  set(d, patch) { this.setState({ h: { ...this.state.h, [d]: { ...this.state.h[d], ...patch } }, copied: false }); }
+  renderVals() {
+    const s = this.state;
+    return {
+      days: DAYS.map((d) => { const x = s.h[d]; return { name: d, from: x.from, to: x.to, closed: !x.on, onAttr: x.on ? 'true' : 'false',
+        swCls: x.on ? 'sw on' : 'sw', rowCls: x.on ? 'day' : 'day closed', toggle: () => this.set(d, { on: !x.on }),
+        setFrom: (e) => this.set(d, { from: e.target.value }), setTo: (e) => this.set(d, { to: e.target.value }) }; }),
+      copyText: s.copied ? 'Copied to all days ✓' : 'Copy Monday to all days',
+      copyMon: () => { const m = s.h.Monday; this.setState({ h: Object.fromEntries(DAYS.map((d) => [d, { ...m }])), copied: true }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

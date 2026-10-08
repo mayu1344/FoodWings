@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Customer home: restaurants near you</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body{margin:0;font-family:'Outfit',sans-serif;color:#111311;background:#F4F7F5}
+a{color:#0E7A3C}a:hover{color:#095A2C}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+@keyframes heart{0%{transform:scale(1)}40%{transform:scale(1.35)}100%{transform:scale(1)}}
+@keyframes slideIn{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:none}}
+@keyframes bump{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 20px;border-radius:999px;font-family:'Outfit',sans-serif;font-weight:700;font-size:15px;border:0;text-decoration:none;box-sizing:border-box;transition:transform .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn-dark{background:#111311;color:#fff}.btn-dark:hover{color:#fff;background:#000}
+.btn-ghost{background:#fff;color:#111311;border:1.5px solid #D6DCD8}.btn-ghost:hover{color:#111311;border-color:#111311}
+.card{background:#fff;border-radius:24px;box-shadow:0 1px 2px rgba(17,19,17,.06),0 10px 28px rgba(17,19,17,.06)}
+.filter{min-height:44px;padding:0 18px;border-radius:999px;border:1.5px solid #D6DCD8;background:#fff;font-family:'Outfit',sans-serif;font-weight:600;font-size:15px;color:#111311;transition:all .2s}
+.filter:hover{border-color:#111311}
+.filter.on{background:#111311;color:#fff;border-color:#111311}
+.photo{position:relative;overflow:hidden;background:linear-gradient(135deg,#BFE6CD,#7FCB9C)}
+.photo img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .7s cubic-bezier(.2,.8,.2,1),filter .4s}
+.rest{text-decoration:none;color:#111311;overflow:hidden;display:flex;flex-direction:column;transition:transform .3s,box-shadow .3s;animation:fadeUp .6s both}
+.rest:hover{color:#111311;transform:translateY(-6px);box-shadow:0 2px 4px rgba(17,19,17,.08),0 24px 48px rgba(17,19,17,.14)}
+.rest:hover .photo img{transform:scale(1.08);filter:saturate(1.3) contrast(1.05)}
+.rest .shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 45%,rgba(0,0,0,.55) 100%)}
+.closed .photo img{filter:grayscale(1) brightness(.9)}
+.fav{position:absolute;right:14px;top:14px;width:44px;height:44px;border-radius:50%;border:0;background:rgba(255,255,255,.92);display:flex;align-items:center;justify-content:center;z-index:2}
+.fav.on svg{animation:heart .45s}
+.offer{animation:slideIn .5s both}
+.dots button{width:10px;height:10px;border-radius:999px;border:0;background:#C9D1CC;padding:0;transition:width .3s,background .3s}
+.dots button.on{width:28px;background:#13A04F}
+.top a.lnk{color:#fff;text-decoration:none;font-weight:600;font-size:16px}.top a.lnk:hover{color:#fff;text-decoration:underline}
+.bump{animation:bump .4s}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div style="min-height: 1360px">
+  <header class="top" style="background: #13A04F; padding: 16px 24px; position: sticky; top: 0; z-index: 10; box-shadow: 0 6px 20px rgba(0,0,0,.08)">
+    <div style="max-width: 1280px; margin: 0 auto; display: flex; flex-wrap: wrap; align-items: center; gap: 20px">
+      <a href="Main.dc.html" style="display: flex; align-items: center; gap: 10px; color: #fff; text-decoration: none">
+        <span style="width: 44px; height: 44px; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#13A04F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11h16a8 8 0 0 1-16 0z"></path><path d="M9 7c0-2 1-3 3-3"></path><path d="M14 8c1-2 3-2 4-1"></path></svg></span>
+        <span style="font-weight: 800; font-size: 28px">Foodu</span>
+      </a>
+      <form style="flex: 1 1 520px; display: flex; flex-wrap: wrap; background: #fff; border-radius: 18px; overflow: hidden">
+        <label style="display: flex; align-items: center; gap: 8px; padding: 0 16px; min-height: 52px; border-right: 1px solid #E4E8E5">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D6336C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>
+          <select aria-label="Delivery address" onChange="{{onAddr}}" style="border: 0; font-family: 'Outfit', sans-serif; font-size: 16px; font-weight: 700; background: transparent; color: #111311"><option value="home">Home · Jayanagar 3rd Block</option><option value="work">Work · Koramangala</option></select>
+        </label>
+        <label style="display: flex; align-items: center; gap: 10px; padding: 0 16px; flex: 1; min-height: 52px">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5D6560" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+          <input type="search" aria-label="Search restaurants or cuisines" placeholder="Search for biryani, dosa, pizza…" value="{{q}}" onInput="{{onSearch}}" style="border: 0; flex: 1; font-family: 'Outfit', sans-serif; font-size: 16px; outline: none">
+        </label>
+      </form>
+      <nav style="display: flex; align-items: center; gap: 20px">
+        <a class="lnk" href="CustomerOrders.dc.html">My orders</a>
+        <a class="btn btn-dark" href="CustomerCheckout.dc.html">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7h14l-1.5 9h-11z"></path><path d="M9 7V5a3 3 0 0 1 6 0v2"></path></svg>Cart · 2
+        </a>
+        <span aria-label="Ravi Kumar" style="width: 44px; height: 44px; border-radius: 50%; background: #FFD7A8; color: #6B3A00; font-weight: 800; display: flex; align-items: center; justify-content: center">RK</span>
+      </nav>
+    </div>
+  </header>
+
+  <main style="max-width: 1280px; margin: 0 auto; padding: 32px 24px 56px; display: flex; flex-direction: column; gap: 32px">
+    <section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px">
+      <div class="card offer" style="grid-column: span 2; min-height: 200px; position: relative; overflow: hidden; background: #111311; color: #fff">
+        <div class="photo" style="position: absolute; inset: 0 0 0 45%; background: #111311"><img src="{{banner.img}}" alt="" style="opacity: .85"></div>
+        <div style="position: absolute; inset: 0; background: linear-gradient(90deg, #111311 40%, rgba(17,19,17,0) 75%)"></div>
+        <div style="position: relative; padding: 30px; display: flex; flex-direction: column; gap: 8px; max-width: 60%">
+          <span style="font-weight: 700; font-size: 13px; letter-spacing: .14em; color: #9FE0B8">{{banner.code}}</span>
+          <span style="font-weight: 800; font-size: 34px; line-height: 1.1">{{banner.title}}</span>
+          <span style="font-size: 15px; color: #C9D1CC">{{banner.note}}</span>
+          <div class="dots" style="display: flex; gap: 6px; margin-top: 14px">
+            <sc-for list="{{dots}}" as="d" hint-placeholder-count="3"><button type="button" class="{{d.cls}}" aria-label="Show offer {{d.n}}" onClick="{{d.go}}"></button></sc-for>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="padding: 24px; display: flex; flex-direction: column; gap: 10px">
+        <span style="font-weight: 600; font-size: 13px; letter-spacing: .12em; color: #5D6560">YOUR LAST ORDER</span>
+        <div style="display: flex; gap: 14px; align-items: center">
+          <span class="photo" style="width: 72px; height: 72px; border-radius: 16px; flex: none"><img src="{{img.biryani}}" alt=""></span>
+          <span style="display: flex; flex-direction: column; gap: 2px"><b style="font-size: 17px">Spice Route Biryani House</b><span style="font-size: 14px; color: #5D6560">Chicken Dum Biryani, Gulab Jamun · ₹497</span></span>
+        </div>
+        <a class="btn btn-ghost" href="CustomerMenu.dc.html" style="align-self: flex-start; min-height: 40px">Order again</a>
+      </div>
+    </section>
+
+    <section style="display: flex; flex-direction: column; gap: 18px">
+      <div style="display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px">
+        <div>
+          <h1 style="margin: 0; font-weight: 800; font-size: 36px; letter-spacing: -0.02em">Restaurants near you</h1>
+          <p style="margin: 4px 0 0; color: #5D6560; font-size: 16px">{{countLine}}</p>
+        </div>
+        <label style="display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 15px">Sort by
+          <select onChange="{{onSort}}" style="min-height: 44px; border-radius: 12px; border: 1.5px solid #D6DCD8; padding: 0 12px; font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 600; background: #fff">
+            <option value="rel">Relevance</option><option value="rating">Rating</option><option value="eta">Delivery time</option><option value="km">Distance</option>
+          </select>
+        </label>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 10px">
+        <sc-for list="{{filters}}" as="f" hint-placeholder-count="6">
+          <button type="button" class="{{f.cls}}" aria-pressed="{{f.on}}" onClick="{{f.toggle}}">{{f.label}}</button>
+        </sc-for>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px">
+        <sc-for list="{{restaurants}}" as="r" hint-placeholder-count="3">
+          <div class="{{r.cls}}" style="position: relative; animation-delay: {{r.delay}}">
+            <button type="button" class="{{r.favCls}}" aria-label="Save {{r.name}}" aria-pressed="{{r.favOn}}" onClick="{{r.fav}}">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="{{r.heartFill}}" stroke="#D6336C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"></path></svg>
+            </button>
+            <a href="CustomerMenu.dc.html" style="text-decoration: none; color: #111311; display: flex; flex-direction: column">
+              <div class="photo" style="height: 200px"><img src="{{r.img}}" alt="{{r.name}}"><div class="shade"></div>
+                <span style="position: absolute; left: 16px; bottom: 14px; color: #fff; font-weight: 800; font-size: 20px; letter-spacing: .02em">{{r.offer}}</span>
+              </div>
+              <div style="padding: 18px 20px 22px; display: flex; flex-direction: column; gap: 8px">
+                <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px">
+                  <span style="font-weight: 800; font-size: 21px">{{r.name}}</span>
+                  <span style="display: inline-flex; align-items: center; gap: 4px; background: #13A04F; color: #fff; font-weight: 700; font-size: 14px; padding: 4px 10px; border-radius: 10px">★ {{r.rating}}</span>
+                </div>
+                <span style="font-size: 15px; color: #5D6560">{{r.cuisines}}</span>
+                <div style="display: flex; gap: 10px; font-size: 14px; font-weight: 600">
+                  <span>{{r.eta}} min</span><span>·</span><span>{{r.km}} km</span><span>·</span><span>{{r.area}}</span>
+                </div>
+              </div>
+            </a>
+          </div>
+        </sc-for>
+      </div>
+      <sc-if value="{{empty}}" hint-placeholder-val="{{ false }}">
+        <div class="card" style="padding: 40px; text-align: center; display: flex; flex-direction: column; gap: 10px; align-items: center">
+          <b style="font-size: 22px">No restaurants match these filters</b>
+          <span style="color: #5D6560">Try removing a filter or searching for something else.</span>
+          <button type="button" class="btn btn-dark" onClick="{{clear}}">Clear filters</button>
+        </div>
+      </sc-if>
+    </section>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1360}}'>
+const IMG = {
+  biryani: '/_blob/2b93675217b8cf367d18aed2a6f9a309', dosa: '/_blob/aad2de03c325c740dd455d9f530c9e3a',
+  pizza: '/_blob/c0dee0bba6f6265de6af739b0d748a80', north: '/_blob/55f3e1023ccff0a1700822ff8d287727',
+  idli: '/_blob/76a88631f5f617db5c26130abcce9db4', salad: '/_blob/fb863844450f9df84ead1b6fb7a9cf8c'
+};
+const DATA = {
+  home: [
+    { id: 1, name: 'Spice Route Biryani House', cuisines: 'Biryani, Andhra, North Indian', tags: ['Biryani', 'North Indian'], veg: false, rating: 4.4, eta: 27, km: 0.5, area: 'Jayanagar', offer: 'FLAT ₹75 OFF', img: IMG.biryani },
+    { id: 2, name: 'Udupi Grand Veg', cuisines: 'South Indian, Beverages', tags: ['South Indian'], veg: true, rating: 4.6, eta: 23, km: 1.6, area: 'Basavanagudi', offer: '50% OFF UP TO ₹100', img: IMG.dosa },
+    { id: 3, name: 'Slice Street Pizza', cuisines: 'Pizza, Italian, Fast Food', tags: ['Pizza'], veg: false, rating: 4.1, eta: 49, km: 4.7, area: 'Koramangala', offer: 'FLAT ₹75 OFF', img: IMG.pizza }
+  ],
+  work: [
+    { id: 3, name: 'Slice Street Pizza', cuisines: 'Pizza, Italian, Fast Food', tags: ['Pizza'], veg: false, rating: 4.1, eta: 32, km: 0.3, area: 'Koramangala', offer: 'FLAT ₹75 OFF', img: IMG.pizza },
+    { id: 1, name: 'Spice Route Biryani House', cuisines: 'Biryani, Andhra, North Indian', tags: ['Biryani', 'North Indian'], veg: false, rating: 4.4, eta: 46, km: 4.4, area: 'Jayanagar', offer: 'FLAT ₹75 OFF', img: IMG.biryani }
+  ]
+};
+const BANNERS = [
+  { code: 'WELCOME50', title: '50% off up to ₹100', note: 'On your order above ₹149', img: IMG.north },
+  { code: 'FLAT75', title: 'Flat ₹75 off', note: 'On orders above ₹299', img: IMG.biryani },
+  { code: 'SOUTH INDIAN SPECIALS', title: 'Crispy dosas from ₹70', note: 'Udupi Grand Veg · Basavanagudi', img: IMG.idli }
+];
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { q: '', addr: 'home', on: {}, sort: 'rel', favs: { 1: true }, b: 0, popped: 0 }; }
+  componentDidMount() { this.t = setInterval(() => this.setState({ b: (this.state.b + 1) % BANNERS.length }), 4000); }
+  componentWillUnmount() { clearInterval(this.t); }
+  renderVals() {
+    const s = this.state, q = s.q.trim().toLowerCase();
+    const flist = ['Biryani', 'South Indian', 'Pizza', 'North Indian', 'Pure veg', 'Rating 4.5+', 'Under 30 min'];
+    let list = DATA[s.addr].filter((r) => {
+      if (q && !(r.name + ' ' + r.cuisines).toLowerCase().includes(q)) return false;
+      const cuis = flist.slice(0, 4).filter((f) => s.on[f]);
+      if (cuis.length && !cuis.some((c) => r.tags.includes(c))) return false;
+      if (s.on['Pure veg'] && !r.veg) return false;
+      if (s.on['Rating 4.5+'] && r.rating < 4.5) return false;
+      if (s.on['Under 30 min'] && r.eta > 30) return false;
+      return true;
+    });
+    if (s.sort === 'rating') list = list.slice().sort((a, b) => b.rating - a.rating);
+    if (s.sort === 'eta') list = list.slice().sort((a, b) => a.eta - b.eta);
+    if (s.sort === 'km') list = list.slice().sort((a, b) => a.km - b.km);
+    const banner = BANNERS[s.b];
+    return {
+      q: s.q, img: IMG, banner,
+      onSearch: (e) => this.setState({ q: e.target.value }),
+      onAddr: (e) => this.setState({ addr: e.target.value }),
+      onSort: (e) => this.setState({ sort: e.target.value }),
+      clear: () => this.setState({ on: {}, q: '' }),
+      dots: BANNERS.map((x, i) => ({ n: i + 1, cls: i === s.b ? 'on' : '', go: () => this.setState({ b: i }) })),
+      filters: flist.map((f) => ({ label: f, on: s.on[f] ? 'true' : 'false', cls: s.on[f] ? 'filter on' : 'filter', toggle: () => this.setState({ on: { ...s.on, [f]: !s.on[f] } }) })),
+      countLine: `${list.length} open now, within 7 km of ${s.addr === 'home' ? 'Home · Jayanagar 3rd Block' : 'Work · Koramangala'}`,
+      empty: list.length === 0,
+      restaurants: list.map((r, i) => ({ ...r, rating: r.rating.toFixed(1), km: r.km.toFixed(1), delay: (i * 0.08) + 's', cls: 'card rest',
+        favOn: s.favs[r.id] ? 'true' : 'false', favCls: s.favs[r.id] ? 'fav on' : 'fav', heartFill: s.favs[r.id] ? '#D6336C' : 'none',
+        fav: () => this.setState({ favs: { ...s.favs, [r.id]: !s.favs[r.id] } }) }))
+    };
+  }
+}
+</script>
+</body>
+</html>
